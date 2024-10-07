@@ -1,0 +1,47 @@
+---
+const {title, subtitle} = Astro.props
+---
+
+<div class="heading">
+  <div class="heading-left"><slot /></div>
+  <div class="heading-right">
+    <h1>{title}</h1>
+    <span>{subtitle}</span>
+  </div>
+</div>
+
+<style>
+  .heading {
+    /* design */
+    background-color: #e8e8e8;
+
+    /* sizing */
+    padding: 0;
+    margin-bottom: 2rem;
+
+    /* nesting */
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .heading h1 {
+    font-size: 2.5rem;
+    margin: 0;
+  }
+
+  .heading span {
+    font-size: 1.5rem;
+    color: #0f0f0f;
+  }
+
+  .heading-left {
+    display: flex;
+    align-items: center;
+  }
+
+  .heading-right {
+    text-align: left;
+    padding: 10rem;
+  }
+</style>

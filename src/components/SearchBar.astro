@@ -1,0 +1,40 @@
+---
+import { CommandPalette } from './CommandPalette.tsx';
+const commands = [
+  {name: 'Resume', href: '/resume', description: 'Things I did' },
+  {name: 'Blog', description: 'Things I wrote about', href: '/blog' },
+  {name: 'Copy email', description: 'The thing you want', action: () => navigator.clipboard.writeText('gulko.5@osu.edu')},
+]
+---
+
+<!-- <Cmdk client:load /> -->
+<!-- <div class="bar" id="bar">
+  🔎 Take me to...
+</div> -->
+<CommandPalette client:load commands={commands} />
+
+<script>
+  // document.getElementById('bar')?.addEventListener('click', () => {
+  //   // openCommandPalette();
+  // });
+</script>
+
+<style>
+  .bar {
+    border: 1px solid black;
+    border-radius: 0.5rem;
+
+    padding: 0.5rem;
+    width: 10rem;
+  }
+
+  [cmdk-list] {
+    min-height: 300px;
+    height: var(--cmdk-list-height);
+    max-height: 500px;
+    transition: height 100ms ease;
+    scroll-padding-block-start: 8px;
+    scroll-padding-block-end: 8px;
+  }
+
+</style>

@@ -1,0 +1,85 @@
+---
+const { encoded, iterations, originalLength } = Astro.props;
+---
+
+<script>
+  class ObfuscatedLetters extends HTMLElement {
+
+    private steps: string[]
+    constructor() {
+      super();
+      const iterations = parseInt(this.getAttribute("iterations") || "2")
+      this.steps = [this.getAttribute("encoded") || ""]
+      let numRevealed = 0
+      const originalLength = parseInt(this.getAttribute("originalLength") || "0")
+
+      // const accessibility_anchor = document.createElement("a")
+      // accessibility_anchor.href = "about:blank"
+      // accessibility_anchor.addEventListener('selectstart', (e) => {
+      //   e.preventDefault()
+
+      // })
+      // this.appendChild(accessibility_anchor) 
+      
+      for (let i = 0; i < originalLength; i++) {
+        let charEl = document.createElement("span");
+        let level = 0;
+        charEl.textContent = this.steps[0][i];
+        let controller = new AbortController;
+        this.appendChild(charEl);
+
+        charEl.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (e.target == null) {
+            return
+          }
+  
+          level++;
+  
+          if (this.steps.length < level + 1) {
+            this.steps.push(atob(this.steps[this.steps.length - 1]));
+          }
+          charEl.textContent = this.steps[level][i]
+  
+          if (level === iterations) {
+            numRevealed++;
+            if (numRevealed === originalLength) {
+              this.allRevealed();
+            }
+            controller.abort()
+          }
+        },  { signal: controller.signal })
+      }
+
+    }
+    
+    allRevealed() {
+      this.innerHTML = ""
+      const linkEl = document.createElement("a")
+      linkEl.textContent = this.steps[this.steps.length - 1]
+      linkEl.href = "mailto:" + this.textContent;
+      this.classList.remove('obfuscated')
+      this.classList.add("revealed")
+      this.appendChild(linkEl)
+    }
+  }
+  customElements.define('obfuscated-letters', ObfuscatedLetters);
+</script>
+
+<obfuscated-letters class="obfuscated" encoded={encoded} {iterations} {originalLength}></obfuscated-letters>
+
+<style>
+  .obfuscated {
+    width: fit-content;
+    font-family:  "SGA", system-ui;
+    /* font-size: 1.2rem; */
+    transition: 1s;
+    user-select: none;
+  }
+
+  .revealed {
+    font-family: system-ui;
+    user-select: all;
+    /* glow */
+    text-shadow:#07ff76 0 0 2rem;
+  }
+</style>

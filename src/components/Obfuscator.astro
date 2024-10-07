@@ -1,0 +1,151 @@
+---
+const { encoded, iterations, originalLength } = Astro.props;
+const encoded_letters = encoded.split('').slice(0, originalLength)
+
+
+---
+
+<span class="obfuscated" data-encoded={encoded} data-iterations={iterations} tabindex="0" title="Obfuscated email">
+  {
+    encoded_letters.map((letter: string, i: number) => (
+        <span
+          class="letter"
+          id={String(i)}
+        >{letter}</span>
+    ))
+  }
+</span>
+
+<script>
+  const obfuscated = document.querySelector('.obfuscated') as HTMLElement
+
+  // TODO: reveal on tab for accessibility
+
+  const encoded = obfuscated.getAttribute('data-encoded') || ''
+  const iterations = parseInt(obfuscated.getAttribute('data-iterations') || '2')
+
+  const letters = document.querySelectorAll('.letter')
+
+  letters.forEach((letter, i) => {
+    letter.addEventListener('mouseenter', () => {
+      revealAll(i)
+    })
+  })
+
+  let letter_levels = new Array(letters.length).fill(0)
+
+  /**
+   * reveals all letters starting from @param startPoint
+   */
+  function revealAll(startPoint: number) {
+    // decode the string
+    const steps = [encoded]
+    for (let i = 0; i < iterations; i++) {
+      steps.push(atob(steps[steps.length - 1]))
+    }
+    // console.log(steps[steps.length - 1])
+
+    // reveal the string in a wave
+    let leftEnd = startPoint - 1
+    let rightEnd = startPoint + 1
+    revealLetter(steps, startPoint)
+    const revealInterval = setInterval(() => {
+      for (let i = leftEnd; i <= rightEnd; i++) {
+        if (i >= 0 && i < letters.length) {
+          revealLetter(steps, i)
+        }
+      }
+      leftEnd--
+      rightEnd++
+      if (letter_levels[0] === iterations && letter_levels[letters.length - 1] === iterations) {
+        clearInterval(revealInterval)
+        everythingRevealed(steps)
+      }
+    }, 100)
+
+  }
+
+
+  // revealAll(1)
+
+  /**
+   * reveals a letter under index, moving it down the steps array
+   * @param steps array of reveal steps
+   * @param i index of the letter to reveal
+   */
+  function revealLetter(steps: string[], i: number) {
+    if (letter_levels[i] < iterations) {
+      letter_levels[i]++
+      letters[i].textContent = steps[letter_levels[i]][i]
+    } else {
+      letters[i].classList.add('revealed')
+    }
+  }
+
+  /**
+   * reveal is complete, replace with an anchor tag
+   */
+   function everythingRevealed(steps: string[]) {
+    obfuscated.innerHTML = ''
+    const linkEl = document.createElement('a')
+    linkEl.textContent = steps[steps.length - 1]
+    linkEl.href = 'mailto:' + steps[steps.length - 1]
+    // obfuscated.classList.remove('obfuscated')
+    obfuscated.classList.add('revealed')
+    obfuscated.appendChild(linkEl)
+  }
+  
+</script>
+
+<style>
+  @font-face {
+    font-family: "SGA";
+    src: url("/fonts/sga.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "minetype";
+    src: url("/fonts/minetype.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "minecraft-sga";
+    src: url("/fonts/minecraft-standard-galactic-alphabet.ttf") format("truetype");
+    /* mono */
+  }
+
+  @font-face {
+    font-family: "minecraft-russian";
+    src: url("/fonts/minecraft-russian.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "sga-pixel-mono";
+    src: url("/fonts/sga-pixel-mono.ttf") format("truetype");
+  }
+
+  /* @font-face {
+    font-family: ;
+  } */
+
+  .obfuscated {
+    width: fit-content;
+    font-family: "sga-pixel-mono", monospace;
+    font-size: 1rem;
+    transition: 1s;
+    user-select: none;
+  }
+  .revealed {
+    font-family: system-ui;
+    /* user-select: all; */
+    /* glow */
+    /* font-size: 2rem; */
+    /* width: fit-content; */
+    text-shadow:#07ff76 0 0 2rem;
+  }
+  .letter {
+    display: inline-block;
+    width: 0.8rem;
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+interface Link {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  links: Link[];
+}
+
+const { links } = Astro.props;
+import SearchBar from './SearchBar.astro';
+---
+
+<nav class="navbar">
+    <ul class="nav-links">
+      {links.map((link) => (
+        <li>
+          <a href={link.href}>{link.label}</a>
+        </li>
+      ))}
+    </ul>
+    
+    <SearchBar />
+</nav>
+
+<style>
+  .navbar {
+    /* design */
+    background-color: #ffffff36;
+    backdrop-filter: blur(10px);
+    border-radius: 0.5rem;
+
+    /* position */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+
+    /* sizing */
+    padding: 1rem;
+    width: fit-content;
+    margin: 0 auto;
+
+    /* nesting */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-links {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links li {
+    margin: 0 1rem;
+  }
+
+  .nav-links a {
+    color: #2b2b2b;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    padding: 0.5rem 0;
+  }
+
+</style>
