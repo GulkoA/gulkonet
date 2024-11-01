@@ -43,7 +43,8 @@ export function CommandPalette({ commands }: Props) {
   useEffect(() => {
     const loadPagefind = async () => {
       if (typeof window !== 'undefined') {
-        const pagefind = await import('../../dist/pagefind/pagefind.js');
+        const path = "/pagefind/pagefind.js"
+        const pagefind = await import(path);
         pagefindRef.current = pagefind;
       }
     };
