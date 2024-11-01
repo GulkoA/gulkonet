@@ -1,23 +1,24 @@
 ---
-const {title, subtitle} = Astro.props
+const {title, titleClass, subtitle, backgroundColor, secondaryColor} = Astro.props;
 ---
 
-<div class="heading">
-  <div class="heading-left"><slot /></div>
+<div class="heading" style={`background-color: ${backgroundColor}`}>
+  <div class="heading-left">
+    <slot />
+  </div>
   <div class="heading-right">
-    <h1>{title}</h1>
-    <span>{subtitle}</span>
+    <h1 style={{color: secondaryColor}} class={titleClass || ""}>{title}</h1>
+    <span style={{color: secondaryColor}}>{subtitle}</span>
+    <slot name="right" />
   </div>
 </div>
 
 <style>
   .heading {
-    /* design */
-    background-color: #e8e8e8;
-
     /* sizing */
-    padding: 0;
+    padding: 3rem 0;
     margin-bottom: 2rem;
+    height: 500px;
 
     /* nesting */
     display: flex;
@@ -32,7 +33,6 @@ const {title, subtitle} = Astro.props
 
   .heading span {
     font-size: 1.5rem;
-    color: #0f0f0f;
   }
 
   .heading-left {
@@ -42,6 +42,7 @@ const {title, subtitle} = Astro.props
 
   .heading-right {
     text-align: left;
-    padding: 10rem;
+    padding: 1rem;
+    margin-left: 1rem;
   }
 </style>

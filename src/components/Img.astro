@@ -1,0 +1,15 @@
+---
+import { Image } from "astro:assets";
+let { filename, alt, draggable, ...rest } = Astro.props;
+draggable = draggable || false;
+
+if (!filename) throw new Error(`"filename" is required in <Img filename="..." />`);
+if (!alt) throw new Error(`"alt" is required in <Img alt="..." />`);
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/*.{jpeg,jpg,png,gif}');
+const image = images['/src/assets/' + filename];
+if (!image) throw new Error(`"${filename}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif}"`);
+---
+
+<Image src={image()} alt={alt} loading="lazy" draggable={draggable} {...rest}/>
+

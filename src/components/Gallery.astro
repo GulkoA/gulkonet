@@ -1,0 +1,86 @@
+
+
+<div class="gallery" draggable="false">
+  <slot />
+</div>
+
+<script>
+  let mouseDown = false;
+  let isDragging = false;
+  let startX: number
+  let scrollLeft: number
+  const slider: HTMLElement = document.querySelector('.gallery') as HTMLElement;
+
+  // const dragOptimize = (element: HTMLElement) => {
+  //   element.setAttribute('draggable', 'false');
+  //   for (const child of element.children) {
+  //     dragOptimize(child as HTMLElement);
+  //   }
+  // }
+  // dragOptimize(slider);
+
+  // Add click event listener to all anchor elements within the gallery
+  const anchors = slider.querySelectorAll('a');
+  anchors.forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+        // console.log('prevent click');
+      }
+    });
+  });
+
+  const startDragging = (e: MouseEvent) => {
+    e.preventDefault();
+    startX = e.pageX - slider?.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+    document.addEventListener('mousemove', move, false);
+  }
+
+  const stopDragging = (e: MouseEvent) => {
+    if (!isDragging) { return; }
+    // prevent anchor tags from navigating
+    e.preventDefault();
+    e.stopPropagation();
+    setTimeout(() => {
+      isDragging = false;
+    }, 50);
+    mouseDown = false;
+    document.removeEventListener('mousemove', move, false);
+  }
+
+  const move = (e: MouseEvent) => {
+    // distance threshold for dragging
+    if (!isDragging && Math.abs(e.pageX - slider?.offsetLeft - startX) < 20) { return; }
+    // console.log("dragging", Math.abs(e.pageX - startX));
+    isDragging = true;
+    const x = e.pageX - slider.offsetLeft;
+    const scroll = x - startX;
+    slider.scrollLeft = scrollLeft - scroll;
+  }
+
+  // Add the event listeners
+  slider.addEventListener('mousedown', startDragging, false);
+  document.addEventListener('mouseup', stopDragging, false);
+  // slider.addEventListener('mouseleave', stopDragging, false);
+</script>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-auto-flow: column; 
+    gap: 1rem;
+
+    overflow-x: scroll;
+    /* scroll-snap-type: x mandatory; */
+    
+    transition: transform 0.3s;
+    
+    padding: 0;
+    margin: 1rem 0;
+
+    
+  }
+</style>
+

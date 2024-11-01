@@ -1,0 +1,44 @@
+---
+// first party
+import type { MarkdownLayoutProps } from "astro";
+
+// custom
+import Based from "./Based.astro"
+import Img from "../components/Img.astro";
+import Heading from "../components/Heading.astro";
+import Button from "../components/Button.astro";
+
+
+type PostFrontmatter = MarkdownLayoutProps<{
+  title: string;
+	description: string;
+  created: string;
+	updated: string;
+  image: string;
+  color: string;
+  secondaryColor: string;
+}>;
+
+const { frontmatter, url } = Astro.props;
+---
+
+<Based frontmatter={frontmatter} url={url}>
+  <Heading title={frontmatter.title} titleClass={`font-${frontmatter.font}`} subtitle={frontmatter.description} backgroundColor={frontmatter.color} secondaryColor={frontmatter.secondaryColor}>
+    <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image"/>
+    <div slot="right" style={{color: frontmatter.secondaryColor}}>
+      <span>Created on {new Date(frontmatter.created).toLocaleDateString()}</span>
+    </div>
+  </Heading>
+  
+  <slot />
+</Based>
+
+<style>
+  .header-image {
+    height: 500px;
+    object-fit: cover;
+
+    mask-image: linear-gradient(to right, rgba(0,0,0,1) 50%, transparent 100%);
+  }
+
+</style>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Command } from 'cmdk';
 import { Search } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 
 interface CommandItem {
@@ -44,8 +43,7 @@ export function CommandPalette({ commands }: Props) {
   useEffect(() => {
     const loadPagefind = async () => {
       if (typeof window !== 'undefined') {
-        const pagefind = await import('../../public/pagefind/pagefind.js');
-        console.log("page loaded", pagefindRef.current);
+        const pagefind = await import('../../dist/pagefind/pagefind.js');
         pagefindRef.current = pagefind;
       }
     };
@@ -120,9 +118,9 @@ export function CommandPalette({ commands }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-4 right-4 p-2 bg-white rounded-md shadow-md"
+        className="fixed top-4 right-4 p-2 bg-white rounded-md"
       >
-        <Search className="w-5 h-5" />
+        <Search className="w-5 h-5" color="black"/>
         <span className="sr-only">Open command palette</span>
       </button>
       <Command.Dialog
@@ -135,6 +133,14 @@ export function CommandPalette({ commands }: Props) {
           <Command 
             className="w-full max-w-2xl rounded-lg bg-white shadow-lg"
             onKeyDown={handleKeyDown}
+            filter={((value, search) => {
+              if (value.toLowerCase().includes(search.toLowerCase())) {
+                return 1;
+              } else {
+                return 0;
+              }
+            })}
+            loop
           >
             <Command.Input
               value={search}
@@ -146,17 +152,18 @@ export function CommandPalette({ commands }: Props) {
               <Command.Empty className="py-2 text-center text-gray-500">
                 No results found.
               </Command.Empty>
-              <AnimatePresence>
+              <Command.Group>
+              {/* <AnimatePresence> */}
               {results.map((command, index) => (
                 <Command.Item
-                key={'command-' + index}
+                key={'command-' + command.name}
                 value={command.name}
                 onSelect={() => {
                   console.log(`Selected command: ${command.name}`);
                   setOpen(false);
                 }}
                 className={`flex flex-col px-2 py-1 rounded cursor-pointer ${
-                  index === selectedIndex ? 'bg-blue-100 shadow-lg' : 'hover:bg-gray-100'
+                  index === selectedIndex ? 'bg-blue-100' : 'hover:bg-gray-100'
                 } transition-all duration-200 ease-in-out`}
               >
                 <div className="flex items-center justify-between">
@@ -168,7 +175,11 @@ export function CommandPalette({ commands }: Props) {
                 <p className="text-sm text-gray-600 mt-1">{command.description}</p>
               </Command.Item>
               ))}
-              <Command.Separator />
+              {/* </Command.List> */}
+              {/* <Command.List className="max-h-[300px] overflow-y-auto p-2" ref={listRef}> */}
+              {/* {[1, 2, 3].map((n) => (<h1>{n}</h1>))} */}
+              </Command.Group>
+              <Command.Group heading={pagefindResults.length > 0 ? "search results" : ""}>
               {pagefindResults.map((result, index) => {return (
                 // <motion.div
                   // key={result.id}
@@ -178,7 +189,7 @@ export function CommandPalette({ commands }: Props) {
                   // transition={{ duration: 0.2 }}
                 // >
                   <Command.Item
-                    key={result.id}
+                    key={'pagefind-' + result.id}
                     value={result.loaded_data.content}
                     onSelect={() => {
                       window.location.href = result.loaded_data.url;
@@ -190,7 +201,7 @@ export function CommandPalette({ commands }: Props) {
                   >
                     <span className="font-medium">{result.loaded_data.meta.title}</span>
                     <span className="text-sm text-gray-500">{result.loaded_data.url}</span>
-                    {/* {console.log(result.loaded_data)} */}
+                    {/* {console.log(result.loaded_data.meta.title)} */}
                     <div className='flex flex-col'>
                       {result.loaded_data.sub_results.map((sub_result: any, index: number) => (
                         <p className="text-sm text-gray-600 mt-1" dangerouslySetInnerHTML={{__html: limitString(sub_result.excerpt, 50)}}></p>  
@@ -203,7 +214,8 @@ export function CommandPalette({ commands }: Props) {
                   </Command.Item>
                 // </motion.div>
               )})}
-              </AnimatePresence>
+              </Command.Group>
+              {/* </AnimatePresence> */}
             </Command.List>
           </Command>
         </div>

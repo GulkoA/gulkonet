@@ -1,0 +1,111 @@
+---
+// first party
+import type { MarkdownLayoutProps } from 'astro';
+// import { ViewTransitions } from 'astro:transitions';
+
+// custom
+import Navbar from '../components/Navbar.astro';
+
+type Frontmatter = MarkdownLayoutProps<{
+  title: string;
+	description: string;
+  created: string;
+	updated: string;
+}>;
+
+const { frontmatter, url } = Astro.props;
+
+const links = [
+	{ href: '/', label: 'Home' },
+	{ href: '/resume', label: 'Resume' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={frontmatter.description} />
+		<meta name="author" content="Alex Gulko" />
+		<meta name="viewport" content="width=device-width" />
+
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{frontmatter.title}</title>
+		<!-- <ViewTransitions /> -->
+	</head>
+	<body>
+			<Navbar links={links}/>
+			<slot />
+	</body>
+</html>
+<style is:global>
+	@font-face {
+		font-family: 'Computer Modern';
+		src: url('/fonts/computer-modern.ttf') format('truetype');
+	}
+	:root {
+		--selected-color: #2b66dd;
+
+	}
+	html {
+		font-family: system-ui;
+	}
+	body {
+		/* margin: 100px; */
+	}
+	p {
+		font-size: 1.2rem;
+		margin-bottom: 1rem;
+	}
+	section {
+		margin: 2rem;
+	}
+
+	p > a,
+	span > a {
+		text-decoration: none;
+		color: white;
+		background-color: var(--selected-color);
+		border-radius: 0.5rem;
+		padding: 0.3rem 0.4rem;
+		transition: 0.2s;
+	}
+	p > a:hover,
+	span > a:hover {
+		background-color: #749bff;
+	}
+	button {
+		border: none;
+		background-color: var(--selected-color);
+		color: white;
+		padding: 1rem 0.5rem;
+		border-radius: 0.5rem;
+	}
+
+	h1 {
+		font-size: 2rem;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+	h2 {
+		font-size: 1.5rem;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.font-serif {
+		font-family: 'Computer Modern', serif;
+	}
+	.font-sans {
+		font-family: system-ui;
+	}
+	.font-mono {
+		font-family: monospace;
+	}
+
+	.center {
+		margin-left: auto;
+		margin-right: auto;
+		width: fit-content;
+	}
+</style>

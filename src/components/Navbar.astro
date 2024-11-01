@@ -19,9 +19,11 @@ import SearchBar from './SearchBar.astro';
           <a href={link.href}>{link.label}</a>
         </li>
       ))}
+      <li>
+        <SearchBar />
+      </li>
     </ul>
     
-    <SearchBar />
 </nav>
 
 <style>

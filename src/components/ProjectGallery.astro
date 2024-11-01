@@ -1,0 +1,129 @@
+---
+import Gallery from "./Gallery.astro";
+import ProjectCard from "./ProjectCard.astro";
+
+const matches = await import.meta.glob('../pages/projects/*.mdx', { eager: true });
+let pages = Object.values(matches);
+
+// sort by date
+pages.sort((a: any, b: any) => {
+  return new Date(b.frontmatter.created).getTime() - new Date(a.frontmatter.created).getTime();
+});
+
+// remove pages prefixed with _
+pages = pages.filter((page: any) => !page.url.includes('_'));
+
+// get all tags
+const allTags: string[] = [];
+pages.forEach((page: any) => {
+  page.frontmatter.tags.forEach((tag: string) => {
+    if (!allTags.includes(tag)) {
+      allTags.push(tag);
+    }
+  });
+});
+allTags.sort();
+---
+
+<div class="tags">
+{allTags.map((tag: string) => (
+  <button class="tag-button">{tag}</button>
+))}
+</div>
+
+<Gallery>
+  {pages.map((page: any) => (
+    <div class="card" data-tags={page.frontmatter.tags.join("\n")}>
+      <ProjectCard
+        title={page.frontmatter.title}
+        description={page.frontmatter.description}
+        image={page.frontmatter.image}
+        color={page.frontmatter.color}
+        secondaryColor={page.frontmatter.secondaryColor}
+        tokens={page.frontmatter.tokens}
+        href={page.url}
+        tags={page.frontmatter.tags}
+        font={page.frontmatter.font}
+      />
+    </div>
+  ))}
+</Gallery>
+
+<script>
+  const tagButtons: HTMLElement[] = [...document.querySelectorAll('.tag-button')] as HTMLElement[];
+  const cards: HTMLElement[] = [...document.querySelectorAll('.card')] as HTMLElement[];
+  const cardTags: string[][] = cards.map((card) => card.getAttribute('data-tags')?.split('\n') || []);
+
+  let selectedTags: Set<string> = new Set();
+
+  tagButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      filterCards(button);
+    });
+  });
+
+  function filterCards(button: HTMLElement) {
+    const tag = button.innerText;
+
+    if (selectedTags.has(tag)) {
+      selectedTags.delete(tag);
+      button.classList.remove('selected');
+    } else {
+      selectedTags.add(tag);
+      button.classList.add('selected');
+    }
+
+    cards.forEach((card, index) => {
+      console.log(cardTags[index]);
+      if (selectedTags.size === 0) {
+        card.style.display = 'block';
+      } else {
+        if ([...selectedTags].every((tag: string) => cardTags[index].includes(tag))) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+  .tag-button {
+    padding: 0.5rem 0.8rem;
+    margin: 0 0.2rem 0.2rem 0;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    line-break: loose;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+
+    opacity: 0.5;
+    transition: all 0.3s ease;
+  }
+  .tag-button:hover {
+    opacity: 0.8;
+    padding: 0.5rem 1rem;
+  }
+  .tag-button.selected {
+    opacity: 1;
+    padding: 0.5rem 1rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+
+  .card {
+    transition: all 0.3s ease;
+  }
+  
+
+</style>
+<!-- 
+<FilterGallery projects={page}>
+</FilterGallery> -->

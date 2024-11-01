@@ -1,0 +1,39 @@
+---
+const { title, link, description } = Astro.props;
+---
+
+<div>
+  <a href={link}>
+    <span class="heading">
+      <slot name="icon" />
+      <h3>{title}</h3>
+    </span>
+    <p>{description}</p>
+  </a>
+</div>
+
+<style>
+  div {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    max-width: 300px;
+  }
+
+  .heading {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 1rem;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  h3 {
+    margin: 0;
+  }
+</style>

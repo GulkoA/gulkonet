@@ -1,102 +1,172 @@
 ---
-const {title, description, href, image, color} = Astro.props
-// const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-// const randomLetters = Array.from({length: 4000}, () => characters[Math.floor(Math.random() * characters.length)]).join('')
+import Img from "../components/Img.astro";
+let {title, description, href, image, color, secondaryColor, tokens, tags, font} = Astro.props
+
+// default tokens
+tokens = tokens || ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+// default tags
+tags = tags || []
+
+// calculate number of tokens
+let averageLength = 0;
+for (let i = 0; i < tokens.length; i++) {
+  averageLength += tokens[i].length;
+}
+averageLength /= tokens.length;
+const numberOfTokens = Math.ceil(3000 / averageLength);
+
 ---
 
-<div class="card">
-  <div class="card-image">
-    <img src={image} alt={title}/>
+<a href={href}>
+<div class="project-card" style={{backgroundColor: color}}>
+  <div class="card-image-container">
+    <Img filename={image} alt={title} class="card-image" />
   </div>
 
   
   <div class="card-body">
-    <h2 class="card-title">{title}</h2>
-    <p>{description}</p>
-    <a href={href} class="card-link">View Project</a>
+    <h2 class={`card-title font-${font}`} style={{color: secondaryColor, textDecoration: 'none'}}>{title}</h2>
+
+    <div class="tags">
+      {tags.map((tag: string) => (
+        <span class="tag" style={{color: secondaryColor, borderColor: secondaryColor}}>{tag}</span>
+      ))}
+    </div>
+
+    <p style={{color: secondaryColor}}>{description}</p>
+    <!-- <a href={href} class="card-link" style={{color: secondaryColor}}>View Project</a> -->
   </div>
   
-  <!-- <div class="card-letters" style={{color: color}}> -->
-    <!-- {randomLetters} -->
-  <!-- </div> -->
+  <div class="project-card-letters" style={{color: secondaryColor}} data-tokens={tokens.join('\n')} data-number={numberOfTokens}></div>
+
 </div>
+</a>
 
 <script>
-  // const card = document.querySelector('.card')
-  // const letters = document.querySelector('.card-letters')
-
-  // if (card !== null && letters !== null) {
-    // card.addEventListener('mousemove', (e) => {
-      // const bounds = card.getBoundingClientRect()
-      // // console.log(bounds)
-      // const x = (e as MouseEvent).clientX - bounds.left
-      // const y = (e as MouseEvent).clientY - bounds.top
-      // letters.style.setProperty('--x', `${x}px`)
-      // letters.style.setProperty('--y', `${y}px`)
-    // })
-  // }
+  const cards = document.querySelectorAll('.project-card');
+  const cardsLetters = document.querySelectorAll('.project-card-letters');
+  
+  if (cards !== null && cardsLetters !== null) {
+    for (let i = 0; i < cardsLetters.length; i++) {
+      const card = cards[i] as HTMLElement
+      const cardLetters = cardsLetters[i] as HTMLElement
+    
+      const characters = cardLetters.getAttribute('data-tokens')?.split('\n') || []
+      const numberOfTokens = parseInt(cardLetters.getAttribute('data-number') || '2000')
+      
+      card.addEventListener('mousemove', (e) => {
+        if (e.buttons) return;
+        const randomLetters = Array.from({length: numberOfTokens}, () => characters[Math.floor(Math.random() * characters.length)]).join('')
+        cardLetters.innerHTML = randomLetters
+        
+        const bounds = card.getBoundingClientRect()
+        const x = (e as MouseEvent).clientX - bounds.left
+        const y = (e as MouseEvent).clientY - bounds.top
+        cardLetters.style.setProperty('--x', `${x}px`)
+        cardLetters.style.setProperty('--y', `${y}px`)
+      })
+    }
+  }
 
 </script>
 
-<style>
-  .card {
+<style scoped>
+  .project-card {
+    position: relative;
     display: flex;
     width: 1000px;
     height: 400px;
     border-radius: 16px;
     overflow: hidden;
-    border: black 1px solid;
+    border: rgb(230, 230, 230) 1px solid;
     padding: 0;
+    z-index: 1;
 
-    background-color: #fff;
+    transition: all 0.3s ease;
 
-    --x: 0px;
-    --y: 0px;
+    scroll-snap-align: start;
+  }
+
+/* remove text decoration from everything inside project card */
+  a {
+    text-decoration: none;
+  }
+
+  .card-image-container {
+    margin-right: 1rem;
+    width: 50%;
+    z-index: 10;
   }
 
   .card-image {
-    margin-right: 1rem;
-    width: 50%;
-  }
-
-  .card-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    mask-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0));
+    mask-image: linear-gradient(to right, rgba(0,0,0,1) 50%, transparent 100%);
+    z-index: 10;
+  }
+
+  .card-title {
+    font-size: 2rem;
   }
 
   .card-body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: top;
     padding: 1rem;
+    z-index: 2;
+    position: relative;
   }
 
-  .card-letters {
+  /* tags */
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .tag {
+    padding: 0.1rem 0.5rem;
+    margin: 0 0.2rem 0.2rem 0;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    line-break: loose;
+    border: 1px solid white;
+  }
+
+  .project-card-letters {
+
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    word-break: break-all;
+    z-index: 1;
+
     --x: 0px;
     --y: 0px;
-    /* behind text */
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    font-size: 1rem;
-    opacity: 0.1; /* Adjust opacity to make it subtle */
-    white-space: normal; /* Allows wrapping */
-    word-wrap: break-word; /* Forces long text to wrap */
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-    pointer-events: none; /* Prevent interaction with letters */
-    -webkit-mask-image: radial-gradient(
-    calc(var(--card-size) * 0.8) circle at var(--x) var(--y), 
-    rgb(255 255 255) 20%, 
-    rgb(255 255 255 / 25%), 
-    transparent
-  );
+
+    mask-image: radial-gradient(
+      circle at var(--x) var(--y),
+      rgba(0,0,0,0.2) 5%,
+      white 15%,
+      rgba(0,0,0,0.1) 20%,
+    transparent 30%
+    );
+
+    opacity: 0;
+    transition: all 0.5s ease;
+
+    user-select: none;
+
+  }
+ 
+  .project-card:hover .project-card-letters {
+    opacity: 0.5;
   }
 </style>
     
