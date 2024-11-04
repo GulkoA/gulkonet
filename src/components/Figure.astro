@@ -5,11 +5,11 @@ import Gallery from '../components/Gallery.astro'
 const { filenames, alt, caption} = Astro.props
 ---
 
-<div style={{width: "fit-content", height: "100%"}} class="center">
+<figure style={{width: "fit-content", height: "100%"}} class="center">
   <Gallery>
     {filenames.map((filename: string) => (
       <Img filename={filename} alt={alt} draggable={false} height="500"/>
     ))}
   </Gallery>
   {caption && <figcaption>{caption}</figcaption>}
-</div>
+</figure>

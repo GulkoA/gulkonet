@@ -30,7 +30,7 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
 
     <div class="tags">
       {tags.map((tag: string) => (
-        <span class="tag" style={{color: secondaryColor, borderColor: secondaryColor}}>{tag}</span>
+        <span class="tag" style={{color: secondaryColor, borderColor: secondaryColor}}>{tag} </span>
       ))}
     </div>
 
@@ -132,13 +132,14 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
     margin: 0 0.2rem 0.2rem 0;
     border-radius: 100px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 500;
     line-break: loose;
     border: 1px solid white;
   }
 
   .project-card-letters {
-
+    font-family: var(--mono-font);
+    font-size: 1rem;
     position: absolute;
     left: 0px;
     top: 0px;

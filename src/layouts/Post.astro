@@ -6,7 +6,7 @@ import type { MarkdownLayoutProps } from "astro";
 import Based from "./Based.astro"
 import Img from "../components/Img.astro";
 import Heading from "../components/Heading.astro";
-import Button from "../components/Button.astro";
+// import Button from "../components/Button.astro";
 
 
 type PostFrontmatter = MarkdownLayoutProps<{
@@ -24,7 +24,7 @@ const { frontmatter, url } = Astro.props;
 
 <Based frontmatter={frontmatter} url={url}>
   <Heading title={frontmatter.title} titleClass={`font-${frontmatter.font}`} subtitle={frontmatter.description} backgroundColor={frontmatter.color} secondaryColor={frontmatter.secondaryColor}>
-    <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image"/>
+    <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image" loading="eager"/>
     <div slot="right" style={{color: frontmatter.secondaryColor}}>
       <span>Created on {new Date(frontmatter.created).toLocaleDateString()}</span>
     </div>

@@ -8,12 +8,17 @@ import ProjectGallery from '../components/ProjectGallery.astro';
 import Obfuscator from '../components/Obfuscator.astro';
 import Img from '../components/Img.astro';
 
+import { Linkedin, Github, Twitter } from 'lucide-astro'
+
 <Heading title="Alex Gulko" subtitle="Undergraduate CS Student and Researcher at The Ohio State University">
-  <Img filename="alex-pixelated.png" alt="Alex Gulko" height="400"/>
+  <Img filename="alex-pixelated.png" alt="Alex Gulko" height="400" loading="eager"/>
   <p slot="right">
     Email me at <Obfuscator encoded="WjNWc2EyOHVOVUJ2YzNVdVpXUjE=" iterations={2} originalLength={15}/>
 
-    Connect with me on <a href="https://www.linkedin.com/in/alexgulko/">LinkedIn</a>
+    <div class="horizontal">
+      <a class="icon" href="https://www.linkedin.com/in/alexgulko/" title="LinkedIn" aria-label="Alex's LinkedIn link"> <Linkedin/> </a>
+      <a class="icon" href="https://github.com/gulkoa/" title="GitHub" aria-label="Alex's GitHub Link"> <Github/> </a>
+    </div>
   </p>
 </Heading>
 

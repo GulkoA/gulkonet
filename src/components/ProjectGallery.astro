@@ -50,15 +50,28 @@ allTags.sort();
 </Gallery>
 
 <script>
+
   const tagButtons: HTMLElement[] = [...document.querySelectorAll('.tag-button')] as HTMLElement[];
   const cards: HTMLElement[] = [...document.querySelectorAll('.card')] as HTMLElement[];
   const cardTags: string[][] = cards.map((card) => card.getAttribute('data-tags')?.split('\n') || []);
 
   let selectedTags: Set<string> = new Set();
 
+  let streak = 0;
+
   tagButtons.forEach((button) => {
     button.addEventListener('click', () => {
       filterCards(button);
+
+      streak++;
+      if (streak === 1) {
+        setTimeout(() => {
+          streak = 0;
+        }, 5000);
+      } else if (streak >= 10) {
+        party();
+        streak = 0;
+      }
     });
   });
 
@@ -74,7 +87,7 @@ allTags.sort();
     }
 
     cards.forEach((card, index) => {
-      console.log(cardTags[index]);
+      // console.log(cardTags[index]);
       if (selectedTags.size === 0) {
         card.style.display = 'block';
       } else {
@@ -85,6 +98,24 @@ allTags.sort();
         }
       }
     });
+  }
+  
+  function party() {
+    const interval = setInterval(() => {
+      tagButtons.forEach((button) => {
+        const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        button.style.color = color;
+        button.style.borderColor = color;
+      });
+    }, 500);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      tagButtons.forEach((button) => {
+        button.style.color = 'black';
+        button.style.borderColor = 'black';
+      });
+    }, 10000);
   }
 </script>
 
@@ -101,7 +132,7 @@ allTags.sort();
     border: 2px solid black;
 
     opacity: 0.5;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.31, 1, 1, 1.37);
   }
   .tag-button:hover {
     opacity: 0.8;
@@ -109,7 +140,8 @@ allTags.sort();
   }
   .tag-button.selected {
     opacity: 1;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.1rem;
+    border-width: 3px;
   }
 
   .tags {

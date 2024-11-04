@@ -21,7 +21,7 @@ const links = [
 ];
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -40,15 +40,27 @@ const links = [
 </html>
 <style is:global>
 	@font-face {
+		font-family: 'lexend';
+		src: url('/fonts/Lexend-Light.ttf') format('truetype');
+	}
+	@font-face {
 		font-family: 'Computer Modern';
 		src: url('/fonts/computer-modern.ttf') format('truetype');
 	}
 	:root {
 		--selected-color: #2b66dd;
+		--general-font: 'lexend', sans-serif;
+		--serif-font: 'Computer Modern', serif;
+		--mono-font: monospace;
 
+		--pagefind-ui-font: var(--general-font);
 	}
+
+	::backdrop {
+    backdrop-filter: blur(4px);
+  }
 	html {
-		font-family: system-ui;
+		font-family: var(--general-font);
 	}
 	body {
 		/* margin: 100px; */
@@ -74,38 +86,52 @@ const links = [
 	span > a:hover {
 		background-color: #749bff;
 	}
-	button {
+
+	button, a.button {
+		font-family: var(--general-font);
 		border: none;
-		background-color: var(--selected-color);
-		color: white;
-		padding: 1rem 0.5rem;
-		border-radius: 0.5rem;
+		cursor: pointer;
+	}
+
+	a.icon, button.icon {
+		background-color: transparent;
+		color: black;
 	}
 
 	h1 {
 		font-size: 2rem;
+		font-weight: 500;
 		margin-top: 1rem;
 		margin-bottom: 1rem;
 	}
 	h2 {
 		font-size: 1.5rem;
+		font-weight: 500;
 		margin-top: 1rem;
 		margin-bottom: 1rem;
 	}
 
 	.font-serif {
-		font-family: 'Computer Modern', serif;
+		font-family: var(--serif-font)
 	}
 	.font-sans {
-		font-family: system-ui;
+		font-family: var(--general-font);
 	}
 	.font-mono {
-		font-family: monospace;
+		font-family: var(--mono-font);
 	}
 
 	.center {
 		margin-left: auto;
 		margin-right: auto;
 		width: fit-content;
+		align-items: center;
+
+	}
+
+	.horizontal {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
 	}
 </style>

@@ -1,30 +1,53 @@
 ---
-import { CommandPalette } from './CommandPalette.tsx';
+// import { CommandPalette } from './CommandPalette.tsx';
+import Search from 'astro-pagefind/components/Search';
 const commands = [
   {name: 'Resume', href: '/resume', description: 'Things I did' },
   {name: 'Blog', description: 'Things I wrote about', href: '/blog' },
   {name: 'Copy email', description: 'The thing you want', action: () => navigator.clipboard.writeText('gulko.5@osu.edu')},
 ]
+import { Search as SearchIcon } from 'lucide-astro';
 ---
 
 <!-- <Cmdk client:load /> -->
 <!-- <div class="bar" id="bar">
   🔎 Take me to...
 </div> -->
-<CommandPalette client:load commands={commands} />
+<!-- <CommandPalette client:load commands={commands} /> -->
+
+
+
+<dialog id="command-dialog">
+  <Search id="pagefind-ui" uiOptions={{showImages: false}}/>
+</dialog>
+
+<button id="open-search-button" class="icon">
+  <SearchIcon />
+</button>
+
+
 
 <script>
-  // document.getElementById('bar')?.addEventListener('click', () => {
-  //   // openCommandPalette();
-  // });
+  const commandDialog = document.getElementById('command-dialog') as HTMLDialogElement;
+  
+
+  document.getElementById('open-search-button')?.addEventListener('click', () => {
+    commandDialog.showModal();
+  });
+
+  commandDialog.addEventListener('click', (e) => {
+    if (e.target === commandDialog) {
+      commandDialog.close();
+    }
+  });
+
 </script>
 
 <style>
-  .bar {
-    border: 1px solid black;
-    border-radius: 0.5rem;
-
-    padding: 0.5rem;
-    width: 10rem;
+  #command-dialog {
+    border: none;
+    border-radius: 1rem;
+    width: 50%;
+    min-width: 400px;
   }
 </style>
