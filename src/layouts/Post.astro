@@ -14,12 +14,14 @@ type PostFrontmatter = MarkdownLayoutProps<{
 	description: string;
   created: string;
 	updated: string;
+  font: "sans" | "serif" | "mono";
   image: string;
   color: string;
   secondaryColor: string;
+  headerLinks: Array<{href: string, label: string}>;
 }>;
 
-const { frontmatter, url } = Astro.props;
+const { frontmatter, url } = Astro.props as PostFrontmatter;
 ---
 
 <Based frontmatter={frontmatter} url={url}>
@@ -27,6 +29,9 @@ const { frontmatter, url } = Astro.props;
     <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image" loading="eager"/>
     <div slot="right" style={{color: frontmatter.secondaryColor}}>
       <span>Created on {new Date(frontmatter.created).toLocaleDateString()}</span>
+      <div class="horizontal">
+        
+      </div>
     </div>
   </Heading>
   
@@ -36,9 +41,19 @@ const { frontmatter, url } = Astro.props;
 <style>
   .header-image {
     height: 500px;
+    width: 100%;
     object-fit: cover;
 
     mask-image: linear-gradient(to right, rgba(0,0,0,1) 50%, transparent 100%);
+  }
+
+  @media (max-width: 800px) {
+    .header-image {
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, transparent 100%);
+      height: 300px;
+      width: 100%;
+    }
+    
   }
 
 </style>

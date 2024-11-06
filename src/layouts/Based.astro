@@ -5,6 +5,7 @@ import type { MarkdownLayoutProps } from 'astro';
 
 // custom
 import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
 
 type Frontmatter = MarkdownLayoutProps<{
   title: string;
@@ -13,7 +14,7 @@ type Frontmatter = MarkdownLayoutProps<{
 	updated: string;
 }>;
 
-const { frontmatter, url } = Astro.props;
+const { frontmatter, url } = Astro.props as Frontmatter;
 
 const links = [
 	{ href: '/', label: 'Home' },
@@ -25,17 +26,27 @@ const links = [
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{frontmatter.title}</title>
+
 		<meta name="description" content={frontmatter.description} />
 		<meta name="author" content="Alex Gulko" />
-		<meta name="viewport" content="width=device-width" />
-
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{frontmatter.title}</title>
+		<link
+		rel="alternate"
+		type="application/rss+xml"
+		title="Alex Gulko"
+		href={new URL("rss.xml", Astro.site)}
+		/>
+		<link rel="sitemap" href="/sitemap-index.xml" />
 		<!-- <ViewTransitions /> -->
 	</head>
 	<body>
 			<Navbar links={links}/>
-			<slot />
+			<main>
+				<slot />
+			</main>
+			<Footer />
 	</body>
 </html>
 <style is:global>
@@ -63,28 +74,40 @@ const links = [
 		font-family: var(--general-font);
 	}
 	body {
-		/* margin: 100px; */
+		margin: 0;
+	}
+	main {
+		/* margin: 2rem; */
+		min-height: 100vh;
 	}
 	p {
 		font-size: 1.2rem;
 		margin-bottom: 1rem;
+		line-height: 1.5;
 	}
 	section {
-		margin: 2rem;
+		margin: 2rem 10%;
+	}
+	.unmargin {
+		margin: 0 -10%;
 	}
 
 	p > a,
 	span > a {
+		word-break: break-word;
+		transition: 0.2s;
+	}
+	a {
+		color: var(--selected-color);
+		text-decoration: none;
+	}
+	p > a:hover,
+	span > a:hover {
 		text-decoration: none;
 		color: white;
 		background-color: var(--selected-color);
 		border-radius: 0.5rem;
-		padding: 0.3rem 0.4rem;
-		transition: 0.2s;
-	}
-	p > a:hover,
-	span > a:hover {
-		background-color: #749bff;
+		padding: 0.3rem 0.3rem;
 	}
 
 	button, a.button {
@@ -96,6 +119,7 @@ const links = [
 	a.icon, button.icon {
 		background-color: transparent;
 		color: black;
+		padding: 0;
 	}
 
 	h1 {

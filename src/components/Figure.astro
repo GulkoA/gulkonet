@@ -2,14 +2,20 @@
 import Img from '../components/Img.astro'
 import Gallery from '../components/Gallery.astro'
 
-const { filenames, alt, caption} = Astro.props
+let { filenames, filename, alt, caption, fullscreenable, ...rest} = Astro.props
+filenames = filenames || [filename]
+fullscreenable = fullscreenable || false
 ---
 
 <figure style={{width: "fit-content", height: "100%"}} class="center">
-  <Gallery>
-    {filenames.map((filename: string) => (
-      <Img filename={filename} alt={alt} draggable={false} height="500"/>
-    ))}
-  </Gallery>
+  {filenames.length === 1 ?
+    <Img filename={filenames[0]} alt={alt} draggable={false} fullscreenable={fullscreenable} {...rest}/>
+    :
+    <Gallery>
+      {filenames.map((filename: string) => (
+        <Img filename={filename} alt={alt} draggable={false} height="500" fullscreenable={fullscreenable} {...rest}/>
+      ))}
+    </Gallery>
+  }
   {caption && <figcaption>{caption}</figcaption>}
 </figure>

@@ -1,11 +1,11 @@
 ---
 // import { CommandPalette } from './CommandPalette.tsx';
 import Search from 'astro-pagefind/components/Search';
-const commands = [
-  {name: 'Resume', href: '/resume', description: 'Things I did' },
-  {name: 'Blog', description: 'Things I wrote about', href: '/blog' },
-  {name: 'Copy email', description: 'The thing you want', action: () => navigator.clipboard.writeText('gulko.5@osu.edu')},
-]
+// const commands = [
+//   {name: 'Resume', href: '/resume', description: 'Things I did' },
+//   {name: 'Blog', description: 'Things I wrote about', href: '/blog' },
+//   {name: 'Copy email', description: 'The thing you want', action: () => navigator.clipboard.writeText('gulko.5@osu.edu')},
+// ]
 import { Search as SearchIcon } from 'lucide-astro';
 ---
 
@@ -18,7 +18,14 @@ import { Search as SearchIcon } from 'lucide-astro';
 
 
 <dialog id="command-dialog">
-  <Search id="pagefind-ui" uiOptions={{showImages: false}}/>
+  <Search id="pagefind-ui" uiOptions={{
+    showImages: false,
+    showSubResults: true,
+    processResult: function (result: any) {
+      console.log(result);
+      return result;
+    },
+  }}/>
 </dialog>
 
 <button id="open-search-button" class="icon">
@@ -47,7 +54,15 @@ import { Search as SearchIcon } from 'lucide-astro';
   #command-dialog {
     border: none;
     border-radius: 1rem;
-    width: 50%;
-    min-width: 400px;
+    width: 70%;
+    /* min-width: 400px; */
+  }
+
+  @media (max-width: 800px) {
+    #command-dialog {
+      width: 100%;
+      height: 75%;
+    }
+    
   }
 </style>

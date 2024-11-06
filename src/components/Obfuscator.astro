@@ -5,19 +5,18 @@ const encoded_letters = encoded.split('').slice(0, originalLength)
 
 ---
 
-<span class="obfuscated-field" data-encoded={encoded} data-iterations={iterations} tabindex="0" title="Obfuscated email">
+<span class="obfuscated-field" data-encoded={encoded} data-iterations={iterations} tabindex="0" title="Obfuscated email" pagedata-pagefind-ignore>
   {
     encoded_letters.map((letter: string, i: number) => (
-        <a
+        <span
           class="letter obfuscated"
           id={String(i)}
-        >{letter}</a>
+        >{letter}</span>
     ))
   }
 </span>
 
 <script>
-import { setTokenSourceMapRange } from "typescript"
 
   const obfuscated = document.querySelector('.obfuscated-field') as HTMLElement
 
@@ -151,6 +150,7 @@ import { setTokenSourceMapRange } from "typescript"
     user-select: none;
     background: none;
     color: black;
+    display: inline-block;
   }
   .letter.obfuscated {
   

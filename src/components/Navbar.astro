@@ -12,7 +12,7 @@ const { links } = Astro.props;
 import SearchBar from './SearchBar.astro';
 ---
 
-<nav class="navbar">
+<nav>
     <ul class="nav-links">
       {links.map((link) => (
         <li>
@@ -26,8 +26,8 @@ import SearchBar from './SearchBar.astro';
     
 </nav>
 
-<style>
-  .navbar {
+<style scoped>
+  nav {
     /* design */
     background-color: #ffffff36;
     backdrop-filter: blur(10px);
@@ -41,18 +41,19 @@ import SearchBar from './SearchBar.astro';
     z-index: 1000;
 
     /* sizing */
-    padding: 1rem;
+    padding: 0.5rem;
     width: fit-content;
-    margin: 0 auto;
+    margin: 0.5rem auto;
 
     /* nesting */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
 
   .nav-links {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    vertical-align: middle;
+
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -69,6 +70,9 @@ import SearchBar from './SearchBar.astro';
     transition: all 0.3s ease-in-out;
     position: relative;
     padding: 0.5rem 0;
+  }
+  .nav-links a:hover {
+    /* color: #000; */
   }
 
 </style>

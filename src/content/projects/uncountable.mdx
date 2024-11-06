@@ -1,0 +1,64 @@
+---
+title: Uncountable
+description: Making surgeries safer with Computer Vision. 1st place at HackOHI/O 2023.
+created: 2023-10-29 est
+image: uncountable.png
+color: "#171717"
+secondaryColor: "white"
+tokens: ["scissors ", "napkin ", "tweezers ", "light "]
+tags: ["YOLO", "computer vision", "python", "flask", "websockets", "electron.js", "machine learning", "web dev", "hackathon"]
+font: 'serif'
+---
+import YouTube from '../../components/YouTube.astro'
+import Figure from '../../components/Figure.astro'
+import Code from 'astro/components/Code.astro'
+
+# TL;DR
+Uncountable is a project my team made in 24 hours during the [2023 HackOHI/O Hackathon](https://hack.osu.edu/2023), winning **1st place out of 200 teams**. Using computer vision, Uncountable tracks surgical instruments during a procedure, alerting the surgeon if any instruments are left inside the patient.
+
+# Problem
+
+RSI incidents occur when a surgical tool is accidentally left inside a patient, potentially leading to severe complications like infection and organ damage [^1]. With about 1,500 incidents each year in the U.S. alone [^2], this problem is typically managed by manual counting or costly RFID tagging. We wanted to create a solution that would be both cost-effective and accurate, automating the process with computer vision, all in 24 hours.
+
+# Process
+
+To create a computer vision software, we first needed some hardware: A "budget-conscious" cardboard box to simulate a patient's body and a top-down web camera to capture the movement of the instruments. We found both in a matter of 30 minutes (running all around campus) and started the works.
+
+<Figure filename="uncountable-system.jpeg" alt="Uncountable hardware: a cardboard box to simulate a patient and a webcam mounted on a tripod" height="500" caption="Our setup" loading="eager"/>
+
+We decided to base our model off YOLOv8, a state-of-the-art real-time object detection model, and enhanced its performance by collecting a custom dataset of instrument images. We took pictures of every related tool we could find at the hackathon: plastic knives, scissors, tissues, and hands in the view of the camera to fine-tune the model and backround subtraction.
+
+<Figure filenames={["uncountable-knife.jpg", "uncountable-scissors.jpg", "uncountable-tissue.jpg"]} alt="Examples from our dataset" caption="Plastic knife, scissors, and tissue captures from our dataset" height="300"/>
+
+The detection model was augmented with a tracking algorithm, which could detect if something was put inside of the box (aka the patient) or taken out.
+
+I designed an Electron.js user interface that gives surgeons a clear, real-time overview of all instruments in use, with a live camera feed and a log of instrument entries and removals.
+
+<Figure filenames={["uncountable-figma.png", "uncountable-ui.png"]} alt="Uncountable UI mockup and UI" caption="Uncountable UI mockup (left) and final UI (right)" height="500"/>
+
+As you may know, Electron.js uses JavaScript, but our PyTorch model was in Python. To bridge the gap, a Python program was spawned as a separate child process with a Flask server, which communicated with the Electron.js UI through WebSocket API.
+
+To make the entire system work seamlessly in real time, I built a multithreaded architecture where the CV model, tracking algorithm, and Python server ran concurrently, providing crucial speed for a surgical application.
+
+Obviously, a JavaScript tool like Electron.js is not the best choice for a high-performance application, but it was best to tackle the problem in 24 hours due to its rapid development capabilities.
+
+<Figure filename="uncountable-architecture.png" alt="Uncountable architecture" caption="Our architecture" height="500"/>
+
+After a long night of coding, testing, debugging, and drinking Red Bull, we glued parts of the system together and ... it worked! Our fine-tuned model detected instruments, tracking algorithm registered insertion/removal events, and the UI displayed everything in real-time. Our only limitations being the 24 hour limit and compute of a laptop, we built something that could potentially save lives.
+
+<Figure filename="uncountable-demo.gif" alt="Short clip from Uncountable demo" caption="Demo" />
+
+
+# Aftermath
+
+Winning 1st place at the [2023 HackOHI/O Hackathon](https://hack.osu.edu/2023) out of 200 teams and 800 participants at HackOHI/O 2023 was a huge honor and an affirmation of our team's effort and dedication to solving a real-world problem. My collaborators, David Novikov, Zeyad Mansour, and Michael Lin, demonstrated outstanding skill and collaboration throughout the challenge.
+
+
+# See more
+All code and training set are available on [GitHub](https://github.com/DavidNovikov/hackohio2023).
+
+<YouTube videoId="QB0wInJyydk" />
+
+
+[^1]: https://pmc.ncbi.nlm.nih.gov/articles/PMC5320916/
+[^2]: https://goldenlawoffice.com/medical-malpractice/how-often-do-surgical-instruments-get-left-inside-patients/

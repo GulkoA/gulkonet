@@ -38,7 +38,7 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
     <!-- <a href={href} class="card-link" style={{color: secondaryColor}}>View Project</a> -->
   </div>
   
-  <div class="project-card-letters" style={{color: secondaryColor}} data-tokens={tokens.join('\n')} data-number={numberOfTokens}></div>
+  <div class="project-card-letters" style={{color: secondaryColor}} data-tokens={tokens.join('\n')} data-number={numberOfTokens} data-pagefind-ignore></div>
 
 </div>
 </a>
@@ -118,6 +118,28 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
     padding: 1rem;
     z-index: 2;
     position: relative;
+  }
+
+  @media (max-width: 800px) {
+    .project-card {
+      flex-direction: column;
+      width: 300px;
+      height: 600px;
+    }
+
+    .card-image-container {
+      width: 100%;
+      height: 50%;
+    }
+
+    .card-image {
+      height: 100%;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, transparent 100%);
+    }
+
+    .card-body {
+      padding: 0.5rem;
+    }
   }
 
   /* tags */

@@ -2,15 +2,15 @@
 const { title, link, description } = Astro.props;
 ---
 
+<a href={link}>
 <div>
-  <a href={link}>
     <span class="heading">
       <slot name="icon" />
       <h3>{title}</h3>
     </span>
-    <p>{description}</p>
-  </a>
-</div>
+    {description && <p>{description}</p>}
+  </div>
+</a>
 
 <style>
   div {
@@ -18,7 +18,8 @@ const { title, link, description } = Astro.props;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 1rem;
-    max-width: 300px;
+    width: 250px;
+    color: black;
   }
 
   .heading {

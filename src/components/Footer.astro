@@ -1,0 +1,80 @@
+---
+import { Github, AlignJustify, Rss } from 'lucide-astro';
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="left part">
+    <p>MIT License © {year} Alex Gulko</p>
+  </div>
+  <div class="right part">
+
+    <a href="/rss.xml" title="RSS feed">
+      <Rss color="white" height="15"/>
+      RSS
+    </a>
+
+    <a href="https://github.com/GulkoA/gulkonet">
+      <Github color="white" height="15"/>
+      Source code
+    </a>
+
+    <a href="/credits">
+      <AlignJustify color="white" height="15"/>
+      Open source credits
+    </a>
+  </div>
+</footer>
+
+<style scoped>
+  footer {
+    /* height: 22px; */
+    height: fit-content;
+    min-height: 22px;
+    /* width: 100vw; */
+    margin: 0;
+    /* margin-top: 2rem; */
+
+    background-color: var(--selected-color);
+    color: white;
+    font-family: var(--mono-font);
+    font-size: 12px;
+    font-weight: 100;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    vertical-align: baseline;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 800px) {
+    footer {
+      flex-direction: column-reverse;
+      padding: 10px;
+    }
+  }
+
+  footer > .part {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    padding: 0 10px;
+    gap: 1rem;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+  }
+
+
+  p {
+    margin: 0;
+    font-size: 12px;
+  }
+</style>

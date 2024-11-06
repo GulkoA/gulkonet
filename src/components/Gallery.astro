@@ -1,11 +1,13 @@
+---
+let { unmargin } = Astro.props
+unmargin = unmargin || false
+---
 
-
-<div class="gallery" draggable="false">
+<div class={`gallery ${unmargin ? "unmargin" : ""}`} draggable="false">
   <slot />
 </div>
 
 <script>
-  let mouseDown = false;
   let isDragging = false;
   let startX: number
   let scrollLeft: number
@@ -78,7 +80,7 @@
     transition: transform 0.3s;
     
     padding: 0;
-    margin: 1rem 0;
+    /* margin: 0 1rem; */
 
     
   }

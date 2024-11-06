@@ -14,3 +14,10 @@ if (!image) throw new Error(`"${filename}" does not exist in glob: "src/assets/*
 
 <Image src={image()} alt={alt} loading={loading} draggable={draggable} {...rest}/>
 
+<style scoped>
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+

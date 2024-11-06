@@ -1,22 +1,24 @@
 ---
+import { getCollection } from 'astro:content';
+
 import Gallery from "./Gallery.astro";
 import ProjectCard from "./ProjectCard.astro";
 
-const matches = await import.meta.glob('../pages/projects/*.mdx', { eager: true });
-let pages = Object.values(matches);
+const pages = await getCollection('projects');
+// console.log(entries);
 
 // sort by date
 pages.sort((a: any, b: any) => {
-  return new Date(b.frontmatter.created).getTime() - new Date(a.frontmatter.created).getTime();
+  return new Date(b.data.created).getTime() - new Date(a.data.created).getTime();
 });
 
 // remove pages prefixed with _
-pages = pages.filter((page: any) => !page.url.includes('_'));
+// pages = pages.filter((page: any) => !page.url.includes('_'));
 
 // get all tags
 const allTags: string[] = [];
 pages.forEach((page: any) => {
-  page.frontmatter.tags.forEach((tag: string) => {
+  page.data.tags.forEach((tag: string) => {
     if (!allTags.includes(tag)) {
       allTags.push(tag);
     }
@@ -31,19 +33,19 @@ allTags.sort();
 ))}
 </div>
 
-<Gallery>
+<Gallery unmargin>
   {pages.map((page: any) => (
-    <div class="card" data-tags={page.frontmatter.tags.join("\n")}>
+    <div class="card" data-tags={page.data.tags.join("\n")}>
       <ProjectCard
-        title={page.frontmatter.title}
-        description={page.frontmatter.description}
-        image={page.frontmatter.image}
-        color={page.frontmatter.color}
-        secondaryColor={page.frontmatter.secondaryColor}
-        tokens={page.frontmatter.tokens}
-        href={page.url}
-        tags={page.frontmatter.tags}
-        font={page.frontmatter.font}
+        title={page.data.title}
+        description={page.data.description}
+        image={page.data.image}
+        color={page.data.color}
+        secondaryColor={page.data.secondaryColor}
+        tokens={page.data.tokens}
+        href={"projects/" + page.slug}
+        tags={page.data.tags}
+        font={page.data.font}
       />
     </div>
   ))}
@@ -132,7 +134,7 @@ allTags.sort();
     border: 2px solid black;
 
     opacity: 0.5;
-    transition: all 0.3s cubic-bezier(0.31, 1, 1, 1.37);
+    transition: all 0.3s cubic-bezier(0.31, 1, 1, 1.1);
   }
   .tag-button:hover {
     opacity: 0.8;
@@ -141,7 +143,8 @@ allTags.sort();
   .tag-button.selected {
     opacity: 1;
     padding: 0.5rem 1.1rem;
-    border-width: 3px;
+    background-color: black;
+    color: white;
   }
 
   .tags {
