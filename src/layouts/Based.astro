@@ -25,20 +25,28 @@ const links = [
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<!-- general -->
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{frontmatter.title}</title>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+		<!-- SSO -->
+		<link rel="sitemap" href="/sitemap-index.xml" />
 		<meta name="description" content={frontmatter.description} />
 		<meta name="author" content="Alex Gulko" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="keywords" content="Alex Gulko, Gulko, CS, OSU, research, personal, blog, software, engineering, programming, web, development" />
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#2b65dd" />
+		<meta name="application-name" content="Alex Gulko" />
+		
+		<!-- rss -->
 		<link
 		rel="alternate"
 		type="application/rss+xml"
 		title="Alex Gulko"
 		href={new URL("rss.xml", Astro.site)}
 		/>
-		<link rel="sitemap" href="/sitemap-index.xml" />
 		<!-- <ViewTransitions /> -->
 
 		<!-- Google tag (gtag.js) -->
@@ -52,9 +60,7 @@ const links = [
 		</script>
 	</head>
 	<body>
-
 		<Navbar links={links}/>
-
 		<main>
 			<slot />
 		</main>
@@ -76,7 +82,7 @@ const links = [
 	}
 
 	:root {
-		--selected-color: #2b66dd;
+		--selected-color: #2b65dd;
 		--general-font: 'Lexend', sans-serif;
 		--serif-font: 'Computer Modern', serif;
 		--mono-font: 'Space Mono', monospace;
