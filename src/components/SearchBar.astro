@@ -9,13 +9,6 @@ import Search from 'astro-pagefind/components/Search';
 import { Search as SearchIcon } from 'lucide-astro';
 ---
 
-<!-- <Cmdk client:load /> -->
-<!-- <div class="bar" id="bar">
-  🔎 Take me to...
-</div> -->
-<!-- <CommandPalette client:load commands={commands} /> -->
-
-
 
 <dialog id="command-dialog">
   <Search id="pagefind-ui" uiOptions={{
@@ -31,8 +24,6 @@ import { Search as SearchIcon } from 'lucide-astro';
 <button id="open-search-button" class="icon" title="Search">
   <SearchIcon />
 </button>
-
-
 
 <script>
   const commandDialog = document.getElementById('command-dialog') as HTMLDialogElement;
