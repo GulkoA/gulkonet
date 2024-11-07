@@ -29,9 +29,6 @@ const { frontmatter, url } = Astro.props as PostFrontmatter;
     <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image" loading="eager"/>
     <div slot="right" style={{color: frontmatter.secondaryColor}}>
       <span>Created on {new Date(frontmatter.created).toLocaleDateString()}</span>
-      <div class="horizontal">
-        
-      </div>
     </div>
   </Heading>
   

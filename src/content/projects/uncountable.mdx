@@ -9,9 +9,10 @@ tokens: ["scissors ", "napkin ", "tweezers ", "light "]
 tags: ["YOLO", "computer vision", "python", "flask", "websockets", "electron.js", "machine learning", "web dev", "hackathon"]
 font: 'serif'
 ---
+import { Github } from 'lucide-astro'
 import YouTube from '../../components/YouTube.astro'
 import Figure from '../../components/Figure.astro'
-import Code from 'astro/components/Code.astro'
+import LinkCard from '../../components/LinkCard.astro'
 
 # TL;DR
 Uncountable is a project my team made in 24 hours during the [2023 HackOHI/O Hackathon](https://hack.osu.edu/2023), winning **1st place out of 200 teams**. Using computer vision, Uncountable tracks surgical instruments during a procedure, alerting the surgeon if any instruments are left inside the patient.
@@ -55,7 +56,9 @@ Winning 1st place at the [2023 HackOHI/O Hackathon](https://hack.osu.edu/2023) o
 
 
 # See more
-All code and training set are available on [GitHub](https://github.com/DavidNovikov/hackohio2023).
+<LinkCard title="Source code" link="https://github.com/DavidNovikov/hackohio2023">
+  <Github color="black" slot="icon"/>
+</LinkCard>
 
 <YouTube videoId="QB0wInJyydk" />
 
