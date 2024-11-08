@@ -64,6 +64,7 @@ const links = [
 		<main>
 			<slot />
 		</main>
+
 		<Footer />
 	</body>
 </html>
@@ -82,7 +83,8 @@ const links = [
 	}
 
 	:root {
-		--selected-color: #2b65dd;
+		--active-color: #2b65dd;
+		--active-color-transparent: #2b66dd70;
 		--general-font: 'Lexend', sans-serif;
 		--serif-font: 'Computer Modern', serif;
 		--mono-font: 'Space Mono', monospace;
@@ -118,28 +120,34 @@ const links = [
 	p > a,
 	span > a {
 		word-break: break-word;
-		transition: 0.2s;
+		transition: 0.2s ease-in-out;
 	}
 	a {
-		color: var(--selected-color);
+		color: var(--active-color);
 		text-decoration: none;
 	}
 	p > a:hover,
 	span > a:hover {
 		text-decoration: none;
 		color: white;
-		background-color: var(--selected-color);
+		background-color: var(--active-color);
 		border-radius: 0.5rem;
 		padding: 0.3rem 0.3rem;
 	}
 
+	p > a:active,
+	span > a:active {
+		box-shadow: #2b66dd6c 0px 0px 0px 0.5rem;
+	}
+
 	button, a.button {
 		font-family: var(--general-font);
+		background-color: none;
 		border: none;
 		cursor: pointer;
 	}
 
-	a.icon, button.icon {
+	a.icon, button.icon{
 		background-color: transparent;
 		color: black;
 		padding: 0;
@@ -181,4 +189,5 @@ const links = [
 		flex-direction: row;
 		gap: 1rem;
 	}
+
 </style>

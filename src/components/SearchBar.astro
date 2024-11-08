@@ -1,6 +1,7 @@
 ---
 // import { CommandPalette } from './CommandPalette.tsx';
 import Search from 'astro-pagefind/components/Search';
+// import * from 'pagefind/pagefind-highlight.js';
 // const commands = [
 //   {name: 'Resume', href: '/resume', description: 'Things I did' },
 //   {name: 'Blog', description: 'Things I wrote about', href: '/blog' },
@@ -14,10 +15,7 @@ import { Search as SearchIcon } from 'lucide-astro';
   <Search id="pagefind-ui" uiOptions={{
     showImages: false,
     showSubResults: true,
-    processResult: function (result: any) {
-      console.log(result);
-      return result;
-    },
+    highlightParam: "highlight"
   }}/>
 </dialog>
 

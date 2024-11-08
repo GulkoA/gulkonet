@@ -12,7 +12,11 @@ const { title, link, description } = Astro.props;
   </div>
 </a>
 
-<style>
+<style scoped>
+  a {
+    width: fit-content;
+    display: block;
+  }
   div {
     padding: 1rem;
     border: 1px solid #ccc;
