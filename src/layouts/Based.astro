@@ -31,16 +31,23 @@ const links = [
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{frontmatter.title}</title>
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="description" content={frontmatter.description} />
 
 		<!-- SSO -->
 		<link rel="sitemap" href="/sitemap-index.xml" />
-		<meta name="description" content={frontmatter.description} />
 		<meta name="author" content="Alex Gulko" />
 		<meta name="keywords" content={"Alex Gulko, Gulko, CS, OSU, research, personal, blog, software, engineering, programming, web, development" + addedTags} />
 		<meta name="robots" content="index, follow" />
 		<meta name="theme-color" content="#2b65dd" />
 		<meta name="application-name" content="Alex Gulko" />
+
+		<!-- favicon -->
+		<link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="/favicon/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+		<meta name="apple-mobile-web-app-title" content="Alex Gulko" />
+		<link rel="manifest" href="/favicon/site.webmanifest" />
 		
 		<!-- rss -->
 		<link
@@ -52,8 +59,8 @@ const links = [
 		<!-- <ViewTransitions /> -->
 
 		<!-- Google tag (gtag.js) -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-P1RK1FBCJM"></script>
-		<script lang="js">
+		<script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-P1RK1FBCJM"></script>
+		<script is:inline>
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());

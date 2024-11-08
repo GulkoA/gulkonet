@@ -12,7 +12,7 @@ const image = images['/src/assets/' + filename];
 if (!image) throw new Error(`"${filename}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif}"`);
 ---
 
-<Image src={image()} alt={alt} loading={loading} draggable={draggable} {...rest}/>
+<Image src={image()} alt={alt} loading={loading} draggable={draggable} densities={[0.8, 1]} decoding="async" {...rest} />
 
 <style scoped>
   img {
