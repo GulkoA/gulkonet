@@ -12,9 +12,11 @@ type Frontmatter = MarkdownLayoutProps<{
 	description: string;
   created: string;
 	updated: string;
+	tags?: string[];
 }>;
 
 const { frontmatter, url } = Astro.props as Frontmatter;
+const addedTags = frontmatter.tags ? ", " + frontmatter.tags.join(", ") : "";
 
 const links = [
 	{ href: '/', label: 'Home' },
@@ -35,7 +37,7 @@ const links = [
 		<link rel="sitemap" href="/sitemap-index.xml" />
 		<meta name="description" content={frontmatter.description} />
 		<meta name="author" content="Alex Gulko" />
-		<meta name="keywords" content="Alex Gulko, Gulko, CS, OSU, research, personal, blog, software, engineering, programming, web, development" />
+		<meta name="keywords" content={"Alex Gulko, Gulko, CS, OSU, research, personal, blog, software, engineering, programming, web, development" + addedTags} />
 		<meta name="robots" content="index, follow" />
 		<meta name="theme-color" content="#2b65dd" />
 		<meta name="application-name" content="Alex Gulko" />
