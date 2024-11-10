@@ -3,7 +3,7 @@ let { unmargin } = Astro.props
 unmargin = unmargin || false
 ---
 
-<div class={`gallery ${unmargin ? "unmargin" : ""}`} draggable="false">
+<div class={`gallery ${unmargin ? "unmargin" : ""}`} draggable="false" title="Click and drag to scroll">
   <slot />
 </div>
 
@@ -67,13 +67,14 @@ unmargin = unmargin || false
   // slider.addEventListener('mouseleave', stopDragging, false);
 </script>
 
-<style>
+<style scoped>
   .gallery {
     display: grid;
     grid-auto-flow: column; 
     gap: 1rem;
 
     overflow-x: scroll;
+    scrollbar-width: none;
     /* scroll-snap-type: x mandatory; */
     
     transition: transform 0.3s;
