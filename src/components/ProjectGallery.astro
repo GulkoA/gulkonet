@@ -57,7 +57,7 @@ allTags.sort();
   const cards: HTMLElement[] = [...document.querySelectorAll('.card')] as HTMLElement[];
   const cardTags: string[][] = cards.map((card) => card.getAttribute('data-tags')?.split('\n') || []);
 
-  let selectedTags: Set<string> = new Set();
+  let selectedTag: string;
 
   let streak = 0;
 
@@ -80,20 +80,23 @@ allTags.sort();
   function filterCards(button: HTMLElement) {
     const tag = button.innerText;
 
-    if (selectedTags.has(tag)) {
-      selectedTags.delete(tag);
-      button.classList.remove('selected');
+    tagButtons.forEach((button) => {
+      button.classList.remove('selected')
+    })
+    if (selectedTag === button.innerText) {
+      selectedTag = "";
+      button.classList.remove('selected')
     } else {
-      selectedTags.add(tag);
-      button.classList.add('selected');
+      selectedTag = tag
+      button.classList.add('selected')
     }
 
     cards.forEach((card, index) => {
       // console.log(cardTags[index]);
-      if (selectedTags.size === 0) {
+      if (selectedTag === "") {
         card.style.display = 'block';
       } else {
-        if ([...selectedTags].every((tag: string) => cardTags[index].includes(tag))) {
+        if (cardTags[index].includes(selectedTag)) {
           card.style.display = 'block';
         } else {
           card.style.display = 'none';
