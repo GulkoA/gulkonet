@@ -15,7 +15,7 @@ type Frontmatter = MarkdownLayoutProps<{
 	tags?: string[];
 }>;
 
-const { frontmatter, url } = Astro.props as Frontmatter;
+const { frontmatter, url, headings } = Astro.props as Frontmatter;
 const addedTags = frontmatter.tags ? ", " + frontmatter.tags.join(", ") : "";
 
 const links = [
@@ -135,7 +135,7 @@ const links = [
 		color: var(--active-color);
 		text-decoration: none;
 	}
-	p > a:hover,
+	p > a:not(.pagefind-ui__result-link):hover,
 	span > a:hover {
 		text-decoration: none;
 		color: white;
@@ -144,10 +144,11 @@ const links = [
 		padding: 0.3rem 0.3rem;
 	}
 
-	p > a:active,
+	p > a:not(.pagefind-ui__result-link):active,
 	span > a:active {
 		box-shadow: #2b66dd6c 0px 0px 0px 0.5rem;
 	}
+
 
 	button, a.button {
 		font-family: var(--general-font);

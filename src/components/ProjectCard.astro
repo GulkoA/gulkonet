@@ -1,5 +1,6 @@
 ---
 import Img from "../components/Img.astro";
+import { ArrowUpRight } from "lucide-astro";
 let {title, description, href, image, color, secondaryColor, tokens, tags, font} = Astro.props
 
 // default tokens
@@ -25,16 +26,20 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
   </div>
 
   
-  <div class="card-body">
-    <h2 class={`card-title font-${font}`} style={{color: secondaryColor, textDecoration: 'none'}}>{title}</h2>
+  <div class="card-body" style={{color: secondaryColor}}>
+    <div class="card-body-top">
+      <h2 class={`card-title font-${font}`} style={{color: secondaryColor, textDecoration: 'none'}}>{title}</h2>
 
-    <div class="tags">
-      {tags.map((tag: string) => (
-        <span class="tag" style={{color: secondaryColor, borderColor: secondaryColor}}>{tag} </span>
-      ))}
+      <div class="tags" data-pagefind-ignore>
+        {tags.map((tag: string) => (
+          <span class="tag" style={{color: secondaryColor, borderColor: secondaryColor}}>{tag} </span>
+        ))}
+      </div>
+
+      <p>{description}</p>
     </div>
 
-    <p style={{color: secondaryColor}}>{description}</p>
+    <span>Read more <ArrowUpRight style={{verticalAlign: "bottom"}} size="21"></span>
     <!-- <a href={href} class="card-link" style={{color: secondaryColor}}>View Project</a> -->
   </div>
   
@@ -114,10 +119,15 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
   .card-body {
     display: flex;
     flex-direction: column;
-    justify-content: top;
+    justify-content: space-between;
     padding: 1rem;
     z-index: 2;
     position: relative;
+  }
+  .card-body-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
   }
 
   @media (max-width: 800px) {

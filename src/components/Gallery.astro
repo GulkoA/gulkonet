@@ -1,25 +1,18 @@
 ---
-let { unmargin } = Astro.props
+let { unmargin, classList } = Astro.props
 unmargin = unmargin || false
 ---
 
-<div class={`gallery ${unmargin ? "unmargin" : ""}`} draggable="false" title="Click and drag to scroll">
+<div class={`gallery ${unmargin ? "unmargin" : ""} ${classList}`} draggable="false" title="Click and drag to scroll">
   <slot />
 </div>
+<slot name="dots"></slot>
 
 <script>
   let isDragging = false;
   let startX: number
   let scrollLeft: number
   const slider: HTMLElement = document.querySelector('.gallery') as HTMLElement;
-
-  // const dragOptimize = (element: HTMLElement) => {
-  //   element.setAttribute('draggable', 'false');
-  //   for (const child of element.children) {
-  //     dragOptimize(child as HTMLElement);
-  //   }
-  // }
-  // dragOptimize(slider);
 
   // Add click event listener to all anchor elements within the gallery
   const anchors = slider.querySelectorAll('a');
@@ -75,6 +68,7 @@ unmargin = unmargin || false
 
     overflow-x: scroll;
     scrollbar-width: none;
+    justify-content: start;
     /* scroll-snap-type: x mandatory; */
     
     transition: transform 0.3s;
@@ -84,5 +78,7 @@ unmargin = unmargin || false
 
     
   }
+
+
 </style>
 
