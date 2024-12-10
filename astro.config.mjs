@@ -11,10 +11,12 @@ import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
 
 import sitemap from '@astrojs/sitemap';
 
+import compress from 'astro-compress';
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://gulko.net",
-  integrations: [mdx(), svelte(), pagefind(), sitemap()],
+  integrations: [mdx(), svelte(), pagefind(), sitemap(), compress()],
   markdown: {
     rehypePlugins: [
       rehypeAccessibleEmojis,

@@ -15,7 +15,7 @@ for (let i = 0; i < tokens.length; i++) {
   averageLength += tokens[i].length;
 }
 averageLength /= tokens.length;
-const numberOfTokens = Math.ceil(3000 / averageLength);
+const numberOfTokens = Math.ceil(2000 / averageLength);
 
 ---
 
@@ -39,7 +39,7 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
       <p>{description}</p>
     </div>
 
-    <span>Read more <ArrowUpRight style={{verticalAlign: "bottom"}} size="21"></span>
+    <span style={{textAlign: 'right'}}>Read more <ArrowUpRight style={{verticalAlign: "bottom"}} size="21"></span>
     <!-- <a href={href} class="card-link" style={{color: secondaryColor}}>View Project</a> -->
   </div>
   
@@ -99,7 +99,7 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
   }
 
   .card-image-container {
-    margin-right: 1rem;
+    /* margin-right: 1rem; */
     width: 50%;
     z-index: 10;
   }
@@ -117,6 +117,7 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
   }
 
   .card-body {
+    width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -129,6 +130,8 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
     flex-direction: column;
     justify-content: top;
   }
+
+
 
   @media (max-width: 800px) {
     .project-card {
@@ -149,6 +152,7 @@ const numberOfTokens = Math.ceil(3000 / averageLength);
 
     .card-body {
       padding: 0.5rem;
+      width: 100%;
     }
   }
 
