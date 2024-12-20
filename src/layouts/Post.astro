@@ -26,7 +26,7 @@ const { frontmatter, url } = Astro.props as PostFrontmatter;
 
 <Based frontmatter={frontmatter} url={url}>
   <Heading title={frontmatter.title} titleClass={`font-${frontmatter.font}`} subtitle={frontmatter.description} backgroundColor={frontmatter.color} secondaryColor={frontmatter.secondaryColor}>
-    <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image" loading="eager"/>
+    <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image" loading="eager" slot="left"/>
     <div slot="right" style={{color: frontmatter.secondaryColor}}>
       <span>Created on {new Date(frontmatter.created).toLocaleDateString()}</span>
     </div>
