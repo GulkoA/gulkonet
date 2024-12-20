@@ -13,9 +13,12 @@ type Frontmatter = MarkdownLayoutProps<{
   created: string;
 	updated: string;
 	tags?: string[];
-}>;
+}> & {
+	backgroundColor?: string;
+	secondaryColor?: string;
+};
 
-const { frontmatter, url, headings } = Astro.props as Frontmatter;
+const { frontmatter, url, headings, backgroundColor, secondaryColor } = Astro.props as Frontmatter;
 const addedTags = frontmatter.tags ? ", " + frontmatter.tags.join(", ") : "";
 
 const links = [
@@ -27,6 +30,16 @@ const links = [
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<!-- Google tag (gtag.js) -->
+		<script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-P1RK1FBCJM"></script>
+		<script async is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-P1RK1FBCJM');
+		</script>
+
 		<!-- general -->
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -58,19 +71,14 @@ const links = [
 		/>
 		<!-- <ViewTransitions /> -->
 
-		<!-- Google tag (gtag.js) -->
-		<script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-P1RK1FBCJM"></script>
-		<script is:inline>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			gtag('config', 'G-P1RK1FBCJM');
-		</script>
+	
 	</head>
 	<body>
 		<Navbar links={links}/>
-		<main>
+		<main style={{
+			backgroundColor: backgroundColor || "white",
+			color: secondaryColor || "black",
+		}}>
 			<slot />
 		</main>
 

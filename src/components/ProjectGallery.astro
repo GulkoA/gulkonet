@@ -130,9 +130,9 @@ allTags.sort();
       const dot = dotsList[i];
       const cardBox = card.getBoundingClientRect();
       if (cardBox.left > 0 && cardBox.right < window.innerWidth) {
-        dot.style.opacity = "1";
+        dot.classList.add('selected');
       } else {
-        dot.style.opacity = "0.3";
+        dot.classList.remove('selected');
       }
     });
   }
@@ -202,11 +202,16 @@ allTags.sort();
     margin-top: 0.5rem;
   }
   .dot {
-    background-color: #353535;
+    border: solid 1px #353535;
+    background-color: white;
     border-radius: 10px;
     height: 10px;
     width: 10px;
     padding: 0;
+    transition: all 0.3s ease;
+  }
+  .dot.selected {
+    background-color: #353535;
   }
   
 
