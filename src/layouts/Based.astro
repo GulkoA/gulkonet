@@ -43,13 +43,13 @@ const links = [
 		<!-- general -->
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<title>{frontmatter.title}</title>
+		<title>{frontmatter.title}{frontmatter.title == "Alex Gulko" ? "" : " : Alex Gulko"}</title>
 		<meta name="description" content={frontmatter.description} />
 
 		<!-- SSO -->
 		<link rel="sitemap" href="/sitemap-index.xml" />
 		<meta name="author" content="Alex Gulko" />
-		<meta name="keywords" content={"Alex Gulko, Gulko, CS, OSU, research, personal, blog, software, engineering, programming, web, development" + addedTags} />
+		<meta name="keywords" content={"Alex Gulko, Gulko, CS, OSU, research, personal, portfolio, blog, software, engineering, programming, web, development" + addedTags} />
 		<meta name="robots" content="index, follow" />
 		<meta name="theme-color" content="#2b65dd" />
 		<meta name="application-name" content="Alex Gulko" />
@@ -122,7 +122,7 @@ const links = [
 		/* margin: 2rem; */
 		min-height: 100vh;
 	}
-	p {
+	p:not(.nodeLabel > p) {
 		font-size: 1.2rem;
 		margin-bottom: 1rem;
 		line-height: 1.5;
