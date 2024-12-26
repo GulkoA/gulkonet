@@ -4,6 +4,7 @@ title: 'Alex Gulko Resume'
 description: 'Alex Gulko Resume - Undergraduate CS Student and Researcher at The Ohio State University'
 ---
 import LinkCard from '../components/LinkCard.astro';
+import PDF from '../components/PDF.astro';
 import { Download } from 'lucide-astro'
 
 # Alex Gulko Resume
@@ -12,70 +13,5 @@ import { Download } from 'lucide-astro'
   <Download size="24" slot="icon"/>
 </LinkCard>
 
+<PDF url="gulko.net/resume.pdf" />
 
-# Education
-
-## The Ohio State University - Bachelor of Science in Computer Science and Engineering
-
-GPA: 3.8 Expected Graduation: May 2023
-
-# Experience
-
-## The Ohio State University - Research Assistant
-  Sep 2022 - Present
-- Invented a novel lossy data compressor, improving compression ration by 68% compared to the baseline
-- Compressed 4D scientific data using implicit neural representations and deep learning methods
-- Conducted experiments on supercomputers with MPI, SLURM, and CUDA
-
-## American Electric Power — Technology Intern, Automated Testing and DevOps
-  May 2023 - Aug 2023
-- Developed an automated code quality analysis tool, expediting code reviews from multiple days to 300 milliseconds
-- Tasked to improve codebase quality, developed a web dashboard to generate and review code quality reports with
-annotated code snippets through a progressive web app (Svelte, Vite, Node.js, TypeScript)
-- Built a GitHub Actions pipeline to assess code on commits and pull requests and present the quality reports
-
-## Hyland Software — Software Developer Shadow
-May 2022 - Jul 2022
-- Wrote a backend for an online store in C# and .NET with SQLite database
-- Tested code using pipelines (CircleCI) and performed Static Analysis
-- Practiced test-driven development and design patterns
-
-## Sigma — Founder, CEO
-Dec 2019 - Sep 2020
-- Developed a Decentralized Smart Home System to bring an affordable alternative to the market
-- Showcased project at the California Science and Technology Fair and to the Sputnik ATX startup accelerator CEO
-- Led the development of a minimum viable product in a team of 5 people
-
-# Projects
-## [Uncountable — Team Lead, Software Engineer — 1st place at HackOHI/O out of 200+ teams](/projects/uncountable)
-Oct 2023
-- Used a custom fine-tuned YOLOv8 model to track items forgotten by surgeons in patients during surgeries
-- Developed a cross-platform Electron.js app to provide a real-time list of all medical tools in the patient’s body
-- Built an architecture with multi-threading, Python child process, and WebSocket API for high performanc
-
-## [Grape I/O — Web Engineer — 1st place at HackAI](/projects/grapeio)
-Feb 2023
-- Developed a machine-learning model to predict wine quality from chemical parameters in a team
-- Web scraped a database of 200 wines with chemical properties
-- Created an online dashboard (Vue.js) for wine quality prediction and a model playground
-
-## [Collision — Team Lead, Full-stack Engineer — 4th place at HackOHI/O out of 220 teams](/projects/collision)
-Oct 2022
-- Developed a full-stack application that integrates with Google Calendar and pulls data for multiple people to find a
-time slot within given constraints when everyone is available (Google OAuth 2.0 API, Vue.js, Node.js, Express.js)
-- Assisted teammates in areas outside of their direct area of expertise, redistributed tasks, and rapidly reassessed the
-backlog when one of the teammates dropped out of the competition
-
-# Leadership and Volunteering
-## [Software Engineering Club — Founder, President](https://osu.dev)
-Sep 2023 - Present
-- Started and led a student organization with over 400 members to promote relevant skills to OSU students
-- Taught workshops in full-stack web development, cloud computing, and Python, helping students enrich their skills
-- Supervised development of a peer mentorship service with Student Government to support undergraduate research
-
-# Skills
-- Programming languages: C++, C, Python, x86 assembly, JavaScript, TypeScript, C#, Java, MATLAB
-- Scientific computing: PyTorch, CUDA, Jupyter, Pillow, OpenCV, NumPy
-- Embedded: VHDL, Linux, FPGA
-- Web development (full-stack) and Cloud: Node.js, Vue.js, Svelte, Django, AWS, Git, CircleCI, GitHub Actions
-- Other: .NET, Android SDK, Agile, Jira, SolidWorks
