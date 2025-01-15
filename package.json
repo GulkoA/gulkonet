@@ -23,6 +23,7 @@
     "lucide-astro": "^0.454.0",
     "pagefind": "^1.1.1",
     "playwright": "^1.49.1",
+    "reading-time": "^1.5.0",
     "rehype-mermaid": "^3.0.0",
     "remark-mermaidjs": "^7.0.0",
     "svelte": "^4.2.19",

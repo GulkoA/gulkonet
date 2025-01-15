@@ -13,6 +13,6 @@ const { Content } = await entry.render();
 
 import Post from '../../layouts/Post.astro';
 ---
-<Post frontmatter={entry.data}>
+<Post frontmatter={entry.data} body={entry.body}>
   <Content />
 </Post>

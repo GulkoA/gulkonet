@@ -20,7 +20,7 @@ import expressiveCode from 'astro-expressive-code';
 // https://astro.build/config
 export default defineConfig({
   site: "https://gulko.net",
-  integrations: [svelte(), expressiveCode(), mdx(), pagefind(), sitemap(), compress(), ],
+  integrations: [svelte(), expressiveCode(), mdx(), pagefind(), sitemap(), compress() ],
   markdown: {
     rehypePlugins: [
       rehypeAccessibleEmojis,

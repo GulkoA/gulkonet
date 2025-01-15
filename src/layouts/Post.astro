@@ -2,6 +2,9 @@
 // first party
 import type { MarkdownLayoutProps } from "astro";
 
+// third party
+import getReadingTime from "reading-time";
+
 // custom
 import Based from "./Based.astro"
 import Img from "../components/Img.astro";
@@ -21,17 +24,20 @@ type PostFrontmatter = MarkdownLayoutProps<{
   headerLinks: Array<{href: string, label: string}>;
 }>;
 
-const { frontmatter, url } = Astro.props as PostFrontmatter;
+const { body, frontmatter, url } = Astro.props as PostFrontmatter & { url: string, body: string };
+
+const readingTime = getReadingTime(body);
+console.log(readingTime);
 ---
 
 <Based frontmatter={frontmatter} url={url}>
   <Heading title={frontmatter.title} titleClass={`font-${frontmatter.font}`} subtitle={frontmatter.description} backgroundColor={frontmatter.color} secondaryColor={frontmatter.secondaryColor}>
     <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image" loading="eager" slot="left"/>
     <div slot="right" style={{color: frontmatter.secondaryColor}}>
-      <span>Created on {new Date(frontmatter.created).toLocaleDateString()}</span>
+      <p>Created on {new Date(frontmatter.created).toLocaleDateString()}</p>
+      <p>{readingTime.text}</p>
     </div>
   </Heading>
-  
   <slot />
 </Based>
 
