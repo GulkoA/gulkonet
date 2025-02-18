@@ -29,14 +29,15 @@ const numberOfTokens = Math.ceil(2000 / averageLength);
   <div class="card-body" style={{color: secondaryColor}}>
     <div class="card-body-top">
       <h2 class={`card-title font-${font}`} style={{color: secondaryColor, textDecoration: 'none'}}>{title}</h2>
-
+      
+      <p>{description}</p>
+      
       <div class="tags" data-pagefind-ignore>
         {tags.map((tag: string) => (
           <span class="tag" style={{color: secondaryColor, borderColor: secondaryColor}}>{tag} </span>
         ))}
       </div>
 
-      <p>{description}</p>
     </div>
 
     <span style={{textAlign: 'right'}}>Read more <ArrowUpRight style={{verticalAlign: "bottom"}} size="21"></span>

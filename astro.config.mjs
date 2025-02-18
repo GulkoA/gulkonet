@@ -6,7 +6,8 @@ import pagefind from 'astro-pagefind';
 
 import svelte from '@astrojs/svelte';
 
-import sectionize from '@hbsnow/rehype-sectionize';
+// import sectionize from '@hbsnow/rehype-sectionize';
+import sectionize from 'remark-sectionize';
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
 
 import remarkMermaid from 'remark-mermaidjs';
@@ -24,10 +25,10 @@ export default defineConfig({
   markdown: {
     rehypePlugins: [
       rehypeAccessibleEmojis,
-      sectionize,
     ],
     remarkPlugins: [
       [remarkMermaid, {}],
+      sectionize,
     ],
 
   }

@@ -107,6 +107,8 @@ const links = [
 		--mono-font: 'Space Mono', monospace;
 
 		--pagefind-ui-font: var(--general-font);
+		
+		--content-margin: calc(max(50vw - 50ch, 0px));
 	}
 
 	::backdrop {
@@ -121,6 +123,7 @@ const links = [
 	main {
 		/* margin: 2rem; */
 		min-height: 100vh;
+		padding: 0 var(--content-margin);
 	}
 	section > p:not(.nodeLabel > p) {
 		font-size: 1.2rem;
@@ -128,11 +131,12 @@ const links = [
 		line-height: 1.5;
 	}
 	section {
-		margin: 1rem auto;
+		margin: 1rem 0;
 		padding: 5px;
-		max-width: 100ch;
+		/* max-width: 100ch; */
 	}
 	.unmargin {
+		margin: 0 calc(var(--content-margin) * -1);
 	}
 
 	p > a,
@@ -172,17 +176,21 @@ const links = [
 		padding: 0;
 	}
 
-	h1 {
-		font-size: 2rem;
-		font-weight: 500;
+	h1, h2, h3 {
 		margin-top: 1rem;
 		margin-bottom: 1rem;
 	}
+	h1 {
+		font-size: 2.5rem;
+		font-weight: 500;
+	}
 	h2 {
+		font-size: 2rem;
+		font-weight: 500;
+	}
+	h3 {
 		font-size: 1.5rem;
 		font-weight: 500;
-		margin-top: 1rem;
-		margin-bottom: 1rem;
 	}
 
 	.font-serif {
