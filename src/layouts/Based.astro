@@ -6,6 +6,7 @@ import type { MarkdownLayoutProps } from 'astro';
 // custom
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import TOC from '../components/TOC.astro';
 
 type Frontmatter = MarkdownLayoutProps<{
   title: string;
@@ -19,6 +20,7 @@ type Frontmatter = MarkdownLayoutProps<{
 };
 
 const { frontmatter, url, headings, backgroundColor, secondaryColor } = Astro.props as Frontmatter;
+
 const addedTags = frontmatter.tags ? ", " + frontmatter.tags.join(", ") : "";
 
 const links = [
@@ -71,6 +73,28 @@ const links = [
 		/>
 		<!-- <ViewTransitions /> -->
 
+		<!-- Katex -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+			integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+			crossorigin="anonymous"
+		/>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+			integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8"
+			crossorigin="anonymous"
+		></script>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+			integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+			crossorigin="anonymous"
+			onload="renderMathInElement(document.body);"
+		></script>
+
+
 	
 	</head>
 	<body>
@@ -79,6 +103,7 @@ const links = [
 			backgroundColor: backgroundColor || "white",
 			color: secondaryColor || "black",
 		}}>
+		<!-- <TOC headings={headings} /> -->
 			<slot />
 		</main>
 
@@ -193,6 +218,14 @@ const links = [
 		font-weight: 500;
 	}
 
+	table, th, td {
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
+	th, td {
+		padding: 0.2rem 0.5rem;
+	}
+
 	.font-serif {
 		font-family: var(--serif-font)
 	}
@@ -215,6 +248,11 @@ const links = [
 		display: flex;
 		flex-direction: row;
 		gap: 1rem;
+	}
+
+	.language-math {
+		font-family: var(--serif-font);
+		font-size: 1.5rem;
 	}
 
 </style>

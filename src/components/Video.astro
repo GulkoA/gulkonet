@@ -1,0 +1,125 @@
+---
+const {src, classList, loop, ...rest} = Astro.props;
+import { RefreshCw, Turtle, Rabbit } from 'lucide-astro'
+---
+
+
+<div class="video-container">
+  <div class="video-controls">
+    <button class="x1-button icon active" aria-label="Play video at 1x speed" title="Play video at 1x speed">
+      <Turtle size={24}/>
+    </button>
+    <button class="x2-button icon" aria-label="Play video at 2x speed" title="Play video at 2x speed">
+      <Rabbit size={24}/>
+    </button>
+    <button class="refresh-button icon" aria-label="Restart video" title="Restart video">
+      <RefreshCw size={20}/>
+    </button>
+  </div>
+  <video class={`autoplay ${classList || ""}`} loop={loop || true} src={src} {...rest}>
+  </video>
+</div>
+
+<script>
+  // modified from https://stackoverflow.com/questions/21163756/html5-and-javascript-to-play-videos-only-when-visible
+  const videos = document.querySelectorAll('.autoplay');
+  const turtles = document.querySelectorAll('.video-controls .x1-button');
+  const rabbits = document.querySelectorAll('.video-controls .x2-button');
+  const refreshButtons = document.querySelectorAll('.video-controls .refresh-button');
+  const fraction = 0.5;
+
+  function checkScroll() {
+
+      for(var i = 0; i < videos.length; i++) {
+
+          const video = videos[i] as HTMLVideoElement;
+          let x = video.offsetLeft, y = video.offsetTop, w = video.offsetWidth, h = video.offsetHeight, r = x + w, //right
+            b = y + h, //bottom
+            visibleX, visibleY, visible;
+
+          visibleX = Math.max(0, Math.min(w, window.pageXOffset + window.innerWidth - x, r - window.pageXOffset));
+          visibleY = Math.max(0, Math.min(h, window.pageYOffset + window.innerHeight - y, b - window.pageYOffset));
+
+          visible = visibleX * visibleY / (w * h);
+ 
+
+          if (visible > fraction) {
+            video.play();
+          } else {
+            video.pause();
+          }
+          
+          video.addEventListener('mousedown', () => {
+            video.pause()
+          })
+          video.addEventListener('mouseup', () => {
+            video.play();
+          })
+
+          turtles[i].setAttribute('data-index', ""+i)
+          turtles[i].addEventListener('click', (e: Event) => {
+            video.playbackRate = 1;
+            const me = e.currentTarget as HTMLElement
+            const i = parseInt(me.getAttribute('data-index') as string)
+            rabbits[i].classList.remove('active');
+            me.classList.add('active');
+          });
+          rabbits[i].setAttribute('data-index', ""+i);
+          rabbits[i].addEventListener('click', (e: Event) => {
+            video.playbackRate = 2;
+            const me = e.currentTarget as HTMLElement
+            const i = parseInt(me.getAttribute('data-index') as string)
+            turtles[i].classList.remove('active');
+            me.classList.add('active');
+          });
+          refreshButtons[i].addEventListener('click', () => {
+            video.currentTime = 0;
+            video.play();
+          });
+
+
+      }
+
+  }
+
+  // Add click event listeners to turtle buttons
+  turtles.forEach((button, index) => {
+  });
+  // Add click event listeners to rabbit buttons
+  rabbits.forEach((button, index) => {
+  });
+  // Add click event listeners to refresh buttons
+  refreshButtons.forEach((button, index) => {
+  });
+
+  window.addEventListener('scroll', checkScroll, false);
+  window.addEventListener('resize', checkScroll, false);
+</script>
+
+<style scoped>
+  .video-container {
+    max-width: 100%;
+    height: auto;
+  }
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  .video-controls {
+    height: 25px;
+    margin-bottom: -25px;
+    transition: all 0.1s ease;
+    opacity: 0;
+    display: flex;
+    position: relative;
+    justify-content: right;
+    gap: 9px;
+    z-index: 2;
+  }
+  .video-controls button.active {
+    opacity: 0.5;
+  }
+  .video-container:hover .video-controls {
+    opacity: 0.9;
+  }
+</style>

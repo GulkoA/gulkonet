@@ -24,13 +24,13 @@ type PostFrontmatter = MarkdownLayoutProps<{
   headerLinks: Array<{href: string, label: string}>;
 }>;
 
-const { body, frontmatter, url } = Astro.props as PostFrontmatter & { url: string, body: string };
+const { body, frontmatter, url, ...otherProps } = Astro.props as PostFrontmatter & { url: string, body: string };
 
 const readingTime = getReadingTime(body);
-console.log(readingTime);
+// console.log(readingTime);
 ---
 
-<Based frontmatter={frontmatter} url={url}>
+<Based frontmatter={frontmatter} url={url} {...otherProps}>
   <Heading title={frontmatter.title} titleClass={`font-${frontmatter.font}`} subtitle={frontmatter.description} backgroundColor={frontmatter.color} secondaryColor={frontmatter.secondaryColor}>
     <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image" loading="eager" slot="left"/>
     <div slot="right" style={{color: frontmatter.secondaryColor}}>
@@ -38,7 +38,8 @@ console.log(readingTime);
       <p>{readingTime.text}</p>
     </div>
   </Heading>
-  <slot />
+    <slot />
+
 </Based>
 
 <style>

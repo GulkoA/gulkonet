@@ -13,7 +13,7 @@ export async function GET(context: any) {
     site: context.site,
     // Array of `<item>`s in output xml
     // See "Generating items" section for examples using content collections and glob imports
-    items: projects.map((post: any) => ({
+    items: projects.sort(post => new Date(post.data.created).getTime()).map((post: any) => ({
       title: post.data.title,
       pubDate: post.data.created,
       description: post.data.description,

@@ -1,0 +1,106 @@
+---
+title: "Implicit Neural Representations: A New Way to Remember"
+description: Implicit Neural Representations (INRs) - representation of structured data as a continuous function. They intruduce novel methods of data compression, interpolation, and trend detection.
+created: 2025-03-17 est
+image: "blog/inr.png"
+color: "white"
+secondaryColor: "black"
+tokens: [""]
+tags: []
+font: 'serif'
+---
+import Video from "../../components/Video.astro"
+import Figure from '../../components/Figure.astro'
+import ModelViewer from '../../components/ModelViewer.astro'
+
+## How do we remember
+
+Technology has been long created to mimic natural world. However, computing sets itself apart in this matter with its rigorous structure. For example, data storage is traditionally highly structured, conforming to a list or a grid of bytes. Humans, on the other hand, retain memories as groups of interconnected called ensembles[^1]. Essentially, a knowledge graph about a situation or topic is captured through a network of neurons, which are frequently activated at the same time. To retrieve this information, brain requires a "cue", which reactivates the same chain[^2]. For example, when forgeting a person's name, one might try to think of when they first met, triggering a memory of learning their name. Mnemonics like this act as cues, which trigger a sequence of strongly connected neurons to "find" the memory[^3].
+
+{/* <Figure/> */}
+
+The approach of storing info as a graph of neuron connections creates strong semantic value for our memories. Similar to database indexes, we retain memories such that we can effectively query a data point, but at the same time don't have to recall more than we need and can store literally our entire life worth of experiences quite compactly.
+
+Traditionally, structured digital data is stored _explicitly_. For instance, an image is represented as a 2D grid of pixels:
+
+{/* Currently, the most common way to represent structured data is *explicitly*. For example, an image can be represented as a 2D array of pixel values: */}
+
+{/* <!-- If two neurons of neurons gets frequently activated, the connection gets stronger (also known as Long-term Potentiation), and consistent lack of activation triggers the connection to weaken Also known as long-term Depression). --> */}
+
+{/* Out brain doesn't have data tables, matrices, or binary files. Instead, all our memories are represented by a connection of neurons in hippocampuus[^1]. */}
+
+{/* ## Explicit vs Implicit */}
+
+<Video src="/videos/blogs/inr/explicit_data.mp4" muted></Video>
+
+Here, each value in the image array corresponds to a pixel color. Explicit representations are rather intuitive, but they lack any semantic context, and therefore take up large amounts of space and don't consider pattern in data.
+
+Another way to store a dataset is _implicitly_. Instead of storing the data directly, we store a function that generates the data. This is very similar to SVG (Scalable Vector Graphics) files, which store images as a series of mathematical functions (lines, curves, etc.) that can be "rasterized" into pixel values. However, while SVGs require data to already be in a vector format, implicit representations can be learned from any discrete data.
+
+To do so, we must learn some function $f$ that maps some property of the data to the data itself. Traditionally, data point coordinate is used for this mapping:
+
+<Video src="/videos/blogs/inr/implicit_data.mp4" muted></Video>
+
+Here, $f$, which takes a position $(x, y)$ as input and outputs the pixel color at that position. Now, in order to save or transmit this image, we only need the function $f$. Additionally, we can interpolate between data points, discover trends, and even interpret the data in novel ways.
+
+## Neural Networks as Implicit Representations
+
+Generating a function that represents a dataset is a non-trivial task, and this is where neural networks come in. Neural networks (specifically the Multilayer Perceptrons) are universal function approximators, meaning they can represent almost any nonlinear function given enough input-output examples. By training a neural network on a coordinates and dataset values, we can learn its implicit _neural_ representation.
+
+<Video src="/videos/blogs/inr/INR.mp4" muted></Video>
+
+To evaluate the quality of an Implicit Neural Representation, we need to find how similar reconstructed data is to the original. Traditionally, we use metrics like PSNR (Peak signal-to-noise ratio) and SSIM (Structural similarity index measure). PSNR is essentially (omitting a few aspects of the formula) the inverse of normalized mean squared error, where $\lim_{PSNR \to 0}$ is no similarity at all and $ \lim_{PSNR \to \inf} $ is a perfect match. However, PSNR only takes global error into account, such that a reconstruction can look noisy, but still have high PSNR. This is why we pair it with SSIM, which considers relative luminance, contrast, and structure and approximates percieved quality difference. When training a neural network, we can introduce these metrics as parts of the loss function.
+
+{/* ### SIREN
+
+One popular neural network architecture for implicit representations is SIREN (Sinusoidal Representation Networks)[^4]. SIREN uses a series of fully connected layers with sinusoidal activation functions. This architecture is well-suited for representing continuous functions, as it can approximate a wide range of functions with a small number of parameters. */}
+
+## Data Compression
+
+One of the key uses of implicit representations is data compression. Since we can often represent high-dimensional data with fewer neurons than data points, this creates an opportunity for data compression. The compression is lossy (reconstructed data will never perfectly recreate the original), but modern neural networks can achieve high degrees of similarity.
+
+Compared to traditional (computational) methods of lossy compression, INRs rely on detecting trends in data, and therefore can capture them much better in reconstruction.
+
+For instance, here I compressed 3D simulation of Isabel Hurricane[^5] with a computational compressor TTHRESH[^6], and an Implicit Neural Representation based on SIREN network[^7]:
+
+<ModelViewer
+    modelNames={["hurricane_gt", "hurricane_tthresh", "hurricane_siren"]}
+    captions={["Original", "TTHRESH", "SIREN INR"]}
+    alt={["Hurricane simulation interactive 3D model, visualization without compression", "visualization after compressing with TTHRESH (visible defects, surface looks noisy and grainy)", "visualization after compressing with SIREN (surface looks smooth, imperfect details reconstruction, but percieved difference is small)."]}
+/>
+
+With a similar compression ratio of over 20,000x, computation compressor TTHRESH has many visual defects, which is represented by SSIM. Implicit Neural Representation SIREN, however, replicated most of the trends contained within data. When compressing a 4-dimensional dataset, which contains 20 time steps of simulation, results are as follow:
+
+|                   | Original  | SIREN INR | TTHRESH   |
+| :------------------ | ----    | ---       | ---       |
+| Size on disk      | 1716 MB   | 79 KB     | 82 KB     |
+| Compression ratio | 1         | 22182     |  21358    |
+| PSNR              | $\inf$    | 36.49     | 33.00     |
+| SSIM              | 1         | 0.96      | 0.90      |
+
+When training a traditional classifier or generative model, overfitting on training data is an absolute evil and should be avoided at all costs. However, since compressive INRs don't need to generalize, high overfitting is actually the goal!
+
+## Interpolation
+
+{/* One of the key benefits of implicit representations is that they allow for interpolation. Given two data points, we can interpolate between them by interpolating their corresponding functions. Here is an example of doing this on an 8x8 smiley face pixel art from above:
+
+<Video src="/videos/blogs/inr/interpolation.mp4" muted></Video>
+
+While interpolating small images like this carries little value, this is useful to visualize and interpret how exactly information is captured. */}
+
+## Trend analysis
+
+[^1]: Colom R, Karama S, Jung RE, Haier RJ. Human intelligence and brain networks. Dialogues Clin Neurosci. 2010;12(4):489-501. https://doi.org/10.31887/DCNS.2010.12.4/rcolom. PMID: 21319494; PMCID: PMC3181994.
+    
+[^2]: Frankland PW, Josselyn SA, Köhler S. The neurobiological foundation of memory retrieval. Nat Neurosci. 2019 Oct;22(10):1576-1585. https://doi.org/10.1038/s41593-019-0493-1. Epub 2019 Sep 24. PMID: 31551594; PMCID: PMC6903648.
+    
+[^3]: Wheeler RL, Gabbert F. Using Self-Generated Cues to Facilitate Recall: A Narrative Review. Front Psychol. 2017 Oct 27;8:1830. https://doi.org/10.3389/fpsyg.2017.01830. PMID: 29163254; PMCID: PMC5664228.
+    {/* [^3]: Endel Tulving, Zena Pearlstone, Availability versus accessibility of information in memory for words, Journal of Verbal Learning and Verbal Behavior, Volume 5, Issue 4, 1966, Pages 381-391, ISSN 0022-5371, https://doi.org/10.1016/S0022-5371(66)80048-8. */}
+
+
+[^5]: Hurricane Isabel data produced by the Weather Research and Forecast (WRF) model, courtesy of NCAR and the U.S. National Science Foundation (NSF). http://vis.computer.org/vis2004contest/data.html/
+
+[^6]: R. Ballester-Ripoll, P. Lindstrom and R. Pajarola, "TTHRESH: Tensor Compression for Multidimensional Visual Data," in IEEE Transactions on Visualization and Computer Graphics, vol. 26, no. 9, pp. 2891-2903, 1 Sept. 2020, doi: 10.1109/TVCG.2019.2904063. https://doi.org/10.1109/TVCG.2019.2904063
+
+
+[^7]: Vincent Sitzmann and Julien N. P. Martel and Alexander W. Bergman and David B. Lindell and Gordon Wetzstein. Implicit Neural Representations with Periodic Activation Functions. 2020. https://arxiv.org/abs/2006.09661.

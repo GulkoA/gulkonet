@@ -1,0 +1,102 @@
+---
+const { alt, modelNames, captions, figcaption } = Astro.props;
+import { RefreshCw } from "lucide-astro";
+import { type LocalImageProps, type RemoteImageProps, getImage, imageConfig } from 'astro:assets';
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/public/3d/**/poster.{jpeg,jpg,png,gif,webp}');
+
+const posters = await modelNames.map( async (name: string) => {
+  const imageBlob = images['/public/3d/' + name + '/poster.png' ];
+  if (!imageBlob) {
+    console.error(`"${name}" does not have a poster.png`);
+    return ""
+  }
+  const props = {
+    src: imageBlob()
+  }
+  const image = await getImage(props)
+  console.log(image.src)
+  return image.src
+})
+
+---
+
+<div class="model-container">
+  <div class="model-controls">
+    <button class="refresh-button icon" aria-label="Reset camera" title="Reset camera">
+      <RefreshCw size={20}/>
+    </button>
+  </div>
+  <div class="model-views">
+    {await modelNames.map(async (src: string, i: number) => {
+      return <model-viewer
+      alt={alt[i]}
+      poster={await posters[i]}
+      src={'/3d/' + src + '/model.gltf'}
+      ar
+      shadow-intensity="0"
+      camera-controls
+      camera-orbit="145deg 55deg 200%"
+      touch-action="pan-y">
+      <div class="annotation">{captions[i]}</div>
+      </model-viewer>
+    })}
+  </div>
+  {figcaption && <figcaption>{figcaption}</figcaption>}
+</div>
+
+<script>
+  import '@google/model-viewer'
+  import type { ModelViewerElement } from '@google/model-viewer'
+
+  const modelViews = document.querySelectorAll('.model-views')
+  const refreshButtons = document.querySelectorAll('.model-controls .refresh-button')
+
+  refreshButtons.forEach((button, i) => {
+    button.addEventListener('click', () => {
+      const views = modelViews[i].querySelectorAll('model-viewer')
+      console.log(views)
+      views.forEach((view: ModelViewerElement) => {
+        view.cameraOrbit = "145deg 55deg 200%"
+        view.cameraTarget = "auto auto auto"
+        view.interactionPrompt = 'none'
+      })
+    })
+  })
+
+</script>
+
+<style>
+  .model-views {
+    height: 500px;
+    width: 100%;
+    position: relative;
+    display: flex;
+  }
+  
+  model-viewer {
+    height: 100%;
+    width: 100%;
+  }
+
+  .model-controls {
+    height: 25px;
+    margin-bottom: -25px;
+    transition: all 0.1s ease;
+    opacity: 0;
+    display: flex;
+    position: relative;
+    justify-content: right;
+    gap: 9px;
+    z-index: 2;
+  }
+  .model-container:hover .model-controls {
+    opacity: 0.9;
+  }
+
+  figcaption {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+</style>
