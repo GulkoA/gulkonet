@@ -7,7 +7,7 @@ filenames = filenames || [filename]
 fullscreenable = fullscreenable || false
 ---
 
-<figure style={{width: "fit-content", height: "100%"}} class="center">
+<figure style={{width: "fit-content", height: "100%", margin: "3rem 0"}} class="center">
   {filenames.length === 1 ?
     <Img filename={filenames[0]} alt={alt} draggable={false} fullscreenable={fullscreenable} {...rest}/>
     :

@@ -1,6 +1,6 @@
 ---
 title: "Implicit Neural Representations: A New Way to Remember"
-description: Implicit Neural Representations (INRs) - representation of structured data as a continuous function. They intruduce novel methods of data compression, interpolation, and trend detection. This blog posts gives intuitive introduction into INRs and explains why overfitting is not always bad
+description: Implicit Neural Representations (INRs) - representation of structured data as a continuous function. They intruduce novel methods of data compression, interpolation, and trend detection. This blog posts gives intuitive introduction into INRs and explains why overfitting is not always a bad thing
 created: 2025-03-17 est
 image: "blog/inr.png"
 color: "white"
@@ -13,7 +13,7 @@ import Video from "../../components/Video.astro"
 import Figure from '../../components/Figure.astro'
 import ModelViewer from '../../components/ModelViewer.astro'
 
-## How do we remember
+## How do We Remember
 
 Technology has been long created to mimic natural world. However, computing sets itself apart in this matter with its rigorous structure. For example, data storage is traditionally highly structured, conforming to a list or a grid of bytes. Humans, on the other hand, retain memories as groups of interconnected neurons called ensembles[^1]. Essentially, a knowledge graph about a situation or topic is captured through a network of neurons, which are frequently activated at the same time. To retrieve this information, brain requires a "cue", which reactivates the same chain[^2]. For example, when forgetting a person's name, one might try to think of when they first met, triggering a memory of learning their name. Mnemonics like this act as cues, which trigger a sequence of strongly connected neurons to "find" the memory[^3].
 
@@ -49,9 +49,11 @@ Generating a function that represents a dataset is a non-trivial task, and this 
 
 <Video src="/videos/blogs/inr/INR.mp4" muted></Video>
 
+In this example, the INR has 2 inputs (for each 2D pixel cooridnate) and one output. However, the number network inputs/outputs can be arbitrary. For example, we can represent a color image with 3 outputs, each encoding one of RGB color channels.
+
 To evaluate the quality of an Implicit Neural Representation, we need to find how similar reconstructed data is to the original. Traditionally, we use metrics like PSNR (Peak signal-to-noise ratio) and SSIM (Structural similarity index measure). PSNR is essentially (omitting a few aspects of the formula) the inverse of normalized mean squared error, where $PSNR \to 0$ is no similarity at all and $ PSNR \to \infty $ is a perfect match. However, PSNR only takes global error into account, such that a reconstruction can look noisy, but still have high PSNR. This is why we pair it with SSIM, which considers relative luminance, contrast, and structure and approximates percieved quality difference. When training a neural network, we can introduce these metrics as parts of the loss function.
 
-As mentioned in the beginning of this blog post, our goal is to pursue benefits of biological memory networks. However, it is important to note that biological neurons have very little in common with mathematical neurons in how they function. You can read more about here: https://doi.org/10.3390/biology12101330.
+> As mentioned in the beginning of this blog post, our goal is to pursue benefits of biological memory networks. However, it is important to note that biological neurons have very little in common with mathematical neurons in how they function. You can read more about here: https://doi.org/10.3390/biology12101330.
 
 {/* ### SIREN
 
@@ -83,17 +85,31 @@ With a similar compression ratio of over 20,000x, computation compressor TTHRESH
 When training a traditional classifier or generative model, overfitting on training data is an absolute evil and should be avoided at all costs. However, since compressive INRs need to recall training data and don't need to generalize trends, high overfitting is actually the goal.
 
 
-{/* ## Interpolation */}
+## Interpolation and Neural Rendering
 
-{/* Great advantage of INRs is that they map discrete data on a continuous function. This means that we can query between data points to interpolate data. */}
+Great advantage of INRs is that they map discrete data on a continuous function. This means that we can query between data points to interpolate data. This is useful for not just increasing resulution of media, but even for generating novel views and projections. For example, NeRF (Neural Radiance Fields) is an INR, which is trained on pictures of an 3D object from different camera positions. The same network is then queried at other camera positions to convert a series of pictures into a 3D model[^8]:
 
-{/* One of the key benefits of implicit representations is that they allow for interpolation. Given two data points, we can interpolate between them by interpolating their corresponding functions. Here is an example of doing this on an 8x8 smiley face pixel art from above: */}
+<Figure filename="blog/nerf_fig1.png" alt="NeRF workflow from input images at different perspectives to rendering new views" caption="NeRF workflow"></Figure>
+
+There are 5 inputs to a NeRF model despite working with 3D models. 3 of them represent $(x, y, z)$ coordinates of the camera. The other 2 are $\theta$ and $\phi$ angles of the camera direction relative to the object. The output of the model is RGB color of a pixel, and volume density (transparency of a pixel). Frames that NeRF generates are an example of Neural Rendering - generation of frames of known object through Neural Networks.
+
+<Figure filenames={["blog/nerf_function.svg", "blog/nerf_projections.png"]} alt="NeRF workflow from input images at different perspectives to rendering new views" caption=""></Figure>
+
+Another interesting feature of NeRF is positional encoding. Since mapping high-frequency spacial coordinates to complex visual scenes is challenging for MLPs, encoding input with more scalars improves model precision. This is similar to when one describes a location in a city to someone, and gives multiple ways to get there, which help identify the location more precisely.
+
+Since camera position and direction are independently parametarized, NeRF can model change of one independently from other. For example, here we have fixed camera viewpoint, while viewing direction varies:
+
+<Video src="http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/ECCV20/nerf/website_renders/viewdirs_website_bww.mp4" muted></Video>
+
+
+
+{/* Here is an example of doing this on an 8x8 smiley face pixel art from above: */}
 
 {/* <Video src="/videos/blogs/inr/interpolation.mp4" muted></Video> */}
 
 {/* While interpolating small images like this carries little value, this is useful to visualize and interpret how exactly information is captured. */}
 
-{/* ## Trend analysis */}
+## Trend analysis
 
 
 [^1]: Colom R, Karama S, Jung RE, Haier RJ. Human intelligence and brain networks. Dialogues Clin Neurosci. 2010;12(4):489-501. https://doi.org/10.31887/DCNS.2010.12.4/rcolom. PMID: 21319494; PMCID: PMC3181994.
@@ -107,3 +123,5 @@ When training a traditional classifier or generative model, overfitting on train
 [^6]: R. Ballester-Ripoll, P. Lindstrom and R. Pajarola, "TTHRESH: Tensor Compression for Multidimensional Visual Data," in IEEE Transactions on Visualization and Computer Graphics, vol. 26, no. 9, pp. 2891-2903, 1 Sept. 2020, doi: 10.1109/TVCG.2019.2904063. https://doi.org/10.1109/TVCG.2019.2904063
 
 [^7]: Vincent Sitzmann and Julien N. P. Martel and Alexander W. Bergman and David B. Lindell and Gordon Wetzstein. Implicit Neural Representations with Periodic Activation Functions. 2020. https://arxiv.org/abs/2006.09661.
+
+[^8]: Ben Mildenhall and Pratul P. Srinivasan and Matthew Tancik and Jonathan T. Barron and Ravi Ramamoorthi and Ren Ng. NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. 2020. https://www.matthewtancik.com/nerf

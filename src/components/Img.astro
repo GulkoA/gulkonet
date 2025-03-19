@@ -7,9 +7,9 @@ loading = loading || "lazy";
 if (!filename) throw new Error(`"filename" is required in <Img filename="..." />`);
 if (!alt) throw new Error(`"alt" is required in <Img alt="..." />`);
 
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}');
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp,svg}');
 const image = images['/src/assets/' + filename];
-if (!image) throw new Error(`"${filename}" does not exist in glob: "src/assets/**/*.{jpeg,jpg,png,gif,webp}"`);
+if (!image) throw new Error(`"${filename}" does not exist in glob: "src/assets/**/*.{jpeg,jpg,png,gif,webp,svg}"`);
 ---
 
 <Image src={image()} alt={alt} loading={loading} draggable={draggable} densities={[0.8, 1]} decoding="async" {...rest} />
