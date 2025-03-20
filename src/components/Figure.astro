@@ -11,11 +11,25 @@ fullscreenable = fullscreenable || false
   {filenames.length === 1 ?
     <Img filename={filenames[0]} alt={alt} draggable={false} fullscreenable={fullscreenable} {...rest}/>
     :
-    <Gallery>
+    <div class="gallery">
       {filenames.map((filename: string) => (
         <Img filename={filename} alt={alt} draggable={false} height="500" fullscreenable={fullscreenable} {...rest}/>
       ))}
-    </Gallery>
+    </div>
   }
   {caption && <figcaption>{caption}</figcaption>}
+  <!-- if slot name caption is passed, add figcaption -->
+  {Astro.slots.caption && <figcaption><slot name="caption"/></figcaption>}
 </figure>
+
+<style>
+    .gallery {
+    display: grid;
+    grid-auto-flow: column; 
+    gap: 1rem;
+
+    justify-content: start;
+    
+    padding: 0;
+  }
+</style>

@@ -65,12 +65,12 @@ One of the key uses of implicit representations is data compression. Since we ca
 
 Compared to traditional (computational) methods of lossy compression, INRs rely on detecting trends in data, and therefore can capture them much better in reconstruction.
 
-For instance, here I compressed 3D simulation of Hurricane Isabel[^5] with a computational compressor TTHRESH[^6], and an Implicit Neural Representation based on SIREN network[^7]:
+For instance, here I compressed 3D simulation of Hurricane Isabel[^5] with an Implicit Neural Representation based on SIREN network[^7] and a computational compressor TTHRESH[^6]:
 
 <ModelViewer
-    modelNames={["hurricane_gt", "hurricane_tthresh", "hurricane_siren"]}
-    captions={["Original", "TTHRESH", "SIREN INR"]}
-    alt={["Hurricane simulation interactive 3D model, visualization without compression", "visualization after compressing with TTHRESH (visible defects, surface looks noisy and grainy)", "visualization after compressing with SIREN (surface looks smooth, imperfect details reconstruction, but percieved difference is small)."]}
+    modelNames={["hurricane_gt", "hurricane_siren", "hurricane_tthresh"]}
+    captions={["Original", "SIREN INR", "TTHRESH"]}
+    alt={["Hurricane simulation interactive 3D model, visualization without compression", "visualization after compressing with SIREN (surface looks smooth, imperfect details reconstruction, but percieved difference is small)", "visualization after compressing with TTHRESH (visible defects, surface looks noisy and grainy)"]}
 />
 
 With a similar compression ratio of over 20,000x, computation compressor TTHRESH has many visual defects, which is represented by SSIM. Implicit Neural Representation SIREN, however, replicated most of the trends contained within data. When compressing a 4-dimensional dataset, which contains 20 time steps of simulation, results are as follow:
@@ -87,21 +87,28 @@ When training a traditional classifier or generative model, overfitting on train
 
 ## Interpolation and Neural Rendering
 
-Great advantage of INRs is that they map discrete data on a continuous function. This means that we can query between data points to interpolate data. This is useful for not just increasing resulution of media, but even for generating novel views and projections. For example, NeRF (Neural Radiance Fields) is an INR, which is trained on pictures of an 3D object from different camera positions. The same network is then queried at other camera positions to convert a series of pictures into a 3D model[^8]:
+Great advantage of INRs is that they map discrete data on a continuous function. This means that we can query between data points to interpolate data. This is useful for not just increasing resulution of media, but even for generating novel views and projections. For example, NeRF (Neural Radiance Fields) is an INR, which is trained on pictures of an 3D object from different camera positions. The same network is then queried at other camera positions to convert a series of pictures into a 3D model[^tthresh]:
 
-<Figure filename="blog/nerf_fig1.png" alt="NeRF workflow from input images at different perspectives to rendering new views" caption="NeRF workflow"></Figure>
+<Figure filename="blog/nerf_fig1.png" alt="NeRF workflow from input images at different perspectives to rendering new views">
+<span slot="caption">NeRF workflow (from NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis[^tthresh])</span>
+</Figure>
 
 There are 5 inputs to a NeRF model despite working with 3D models. 3 of them represent $(x, y, z)$ coordinates of the camera. The other 2 are $\theta$ and $\phi$ angles of the camera direction relative to the object. The output of the model is RGB color of a pixel, and volume density (transparency of a pixel). Frames that NeRF generates are an example of Neural Rendering - generation of frames of known object through Neural Networks.
 
-<Figure filenames={["blog/nerf_function.svg", "blog/nerf_projections.png"]} alt="NeRF workflow from input images at different perspectives to rendering new views" caption=""></Figure>
+<Figure filenames={["blog/nerf_function.svg", "blog/nerf_projections.png"]} alt="NeRF workflow from input images at different perspectives to rendering new views">
+<span slot="caption">(from NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis[^tthresh])</span>
+</Figure>
 
 Another interesting feature of NeRF is positional encoding. Since mapping high-frequency spacial coordinates to complex visual scenes is challenging for MLPs, encoding input with more scalars improves model precision. This is similar to when one describes a location in a city to someone, and gives multiple ways to get there, which help identify the location more precisely.
 
-Since camera position and direction are independently parametarized, NeRF can model change of one independently from other. For example, here we have fixed camera viewpoint, while viewing direction varies:
+Since camera position and direction are independently parametarized, NeRF can even model change of one independently from other. For example, here we have fixed camera viewpoint, while viewing direction varies:
 
+{/* <figure> */}
 <Video src="http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/ECCV20/nerf/website_renders/viewdirs_website_bww.mp4" muted></Video>
+<figcaption>(from NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis[^tthresh])</figcaption>
+{/* </figure> */}
 
-
+This method has uses ranging from medical imaging, to computer graphics, to even generating novel views of historical sites.
 
 {/* Here is an example of doing this on an 8x8 smiley face pixel art from above: */}
 
@@ -109,7 +116,29 @@ Since camera position and direction are independently parametarized, NeRF can mo
 
 {/* While interpolating small images like this carries little value, this is useful to visualize and interpret how exactly information is captured. */}
 
-## Trend analysis
+## Trend Analysis and Interpretability
+
+Since INRs are mapping discrete data onto a continuous function through finding patterns, we can reverse engineer the learned weights of the network to discover these patterns. This is useful for trend analysis, as we can interpret the data in novel ways. By analyzing the weights of the network, we can discover trends in the data, such as periodicity, trends, and even anomalies.
+
+For example, iHyperTime introduced an INR that evaluates and generates time series data (any data mapped to time, such as weather, finincial trends, or social metrics)[^ihypertime]. To do, it uses 3 models for different levels of frequency: Trend (polynomial function), Seasonality (learnable Fourier series), and Residual (SIREN INR). This architecture is called TSNet and allows to model and interpret complex time series data with high accuracy.
+
+<Figure filename="blog/tsnet.png" alt="TSNet model generating time series data">
+<span slot="caption">TSNet architecture (from iHyperTime: Interpretable Time Series Generation with Implicit Neural Representations[^ihypertime])</span>
+</Figure>
+
+After training a TSNet INR on known data, iHyperTime, uses it to generate new, synthetic time series. It does this with a "hypernetwork" - a network that predicts the parameters (or weights) of TSNet for different time series. Essentially, iHyperTime first summarizes a real time series to capture its trend, seasonality, and residual components, and, by tweaking them, it can generate brand new time series that still look like real data.
+
+For example, here is the distribution and overlap of storck market data generated by iHyperTime and some non-INR models:
+
+<Figure filename="blog/iht_stock360.png" alt="Distribution of Stock360 market data generated by TSNet">
+<span slot="caption">Distribution of Stock360 market data generated by TSNet (from iHyperTime: Interpretable Time Series Generation with Implicit Neural Representations[^ihypertime])</span>
+</Figure>
+
+{/* As you can see, synthetic data generated by iHyperTime is very similar by distribution to real data. */}
+
+<Figure filename="blog/iht_stock360_overlap.png" alt="Stock360 market data generated by TSNet">
+<span slot="caption">Stock360 market data generated by TSNet and other models, where a greater overlap of blue and red dots shows a better similarity between the generated data and original data. (from iHyperTime: Interpretable Time Series Generation with Implicit Neural Representations[^ihypertime])</span>
+</Figure>
 
 
 [^1]: Colom R, Karama S, Jung RE, Haier RJ. Human intelligence and brain networks. Dialogues Clin Neurosci. 2010;12(4):489-501. https://doi.org/10.31887/DCNS.2010.12.4/rcolom. PMID: 21319494; PMCID: PMC3181994.
@@ -124,4 +153,6 @@ Since camera position and direction are independently parametarized, NeRF can mo
 
 [^7]: Vincent Sitzmann and Julien N. P. Martel and Alexander W. Bergman and David B. Lindell and Gordon Wetzstein. Implicit Neural Representations with Periodic Activation Functions. 2020. https://arxiv.org/abs/2006.09661.
 
-[^8]: Ben Mildenhall and Pratul P. Srinivasan and Matthew Tancik and Jonathan T. Barron and Ravi Ramamoorthi and Ren Ng. NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. 2020. https://www.matthewtancik.com/nerf
+[^tthresh]: Ben Mildenhall and Pratul P. Srinivasan and Matthew Tancik and Jonathan T. Barron and Ravi Ramamoorthi and Ren Ng. NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. 2020. https://www.matthewtancik.com/nerf
+
+[^ihypertime]: iHyperTime: Interpretable Time Series Generation with Implicit Neural Representations. Elizabeth Fons and Alejandro Sztrajman and Yousef El-Laham and Andrea Coletta and Alexandros Iosifidis and Svitlana Vyetrenko. Transactions on Machine Learning Research. 2024. https://openreview.net/forum?id=GSnGPgeoS5
