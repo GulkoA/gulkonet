@@ -84,7 +84,6 @@ With a similar compression ratio of over 20,000x, computation compressor TTHRESH
 
 When training a traditional classifier or generative model, overfitting on training data is an absolute evil and should be avoided at all costs. However, since compressive INRs need to recall training data and don't need to generalize trends, high overfitting is actually the goal.
 
-
 ## Interpolation and Neural Rendering
 
 Great advantage of INRs is that they map discrete data on a continuous function. This means that we can query between data points to interpolate data. This is useful for not just increasing resulution of media, but even for generating novel views and projections. For example, NeRF (Neural Radiance Fields) is an INR, which is trained on pictures of an 3D object from different camera positions. The same network is then queried at other camera positions to convert a series of pictures into a 3D model[^tthresh]:
