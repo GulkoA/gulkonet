@@ -24,7 +24,7 @@ type PostFrontmatter = MarkdownLayoutProps<{
   headerLinks: Array<{href: string, label: string}>;
 }>;
 
-const { body, frontmatter, url, ...otherProps } = Astro.props as PostFrontmatter & { url: string, body: string };
+const { body, frontmatter, url, dateVerb, ...otherProps } = Astro.props as PostFrontmatter & { url: string, body: string, dateVerb: string };
 
 const readingTime = getReadingTime(body);
 // console.log(readingTime);
@@ -34,7 +34,7 @@ const readingTime = getReadingTime(body);
   <Heading title={frontmatter.title} titleClass={`font-${frontmatter.font}`} subtitle={frontmatter.description} backgroundColor={frontmatter.color} secondaryColor={frontmatter.secondaryColor}>
     <Img filename={frontmatter.image} alt={frontmatter.title} class="header-image" loading="eager" slot="left"/>
     <div slot="right" style={{color: frontmatter.secondaryColor}}>
-      <p>Created on {new Date(frontmatter.created).toLocaleDateString()}</p>
+      <p>{dateVerb} on {new Date(frontmatter.created).toLocaleDateString()}</p>
       <p>{readingTime.text}</p>
     </div>
   </Heading>

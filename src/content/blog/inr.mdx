@@ -1,7 +1,7 @@
 ---
 title: "Implicit Neural Representations: A New Way to Remember"
 description: Implicit Neural Representations (INRs) - representation of structured data as a continuous function. They intruduce novel methods of data compression, interpolation, and trend detection. This blog posts gives intuitive introduction into INRs and explains why overfitting is not always a bad thing
-created: 2025-03-17 est
+created: 2025-03-20 est
 image: "blog/inr.png"
 color: "white"
 secondaryColor: "black"
@@ -31,7 +31,7 @@ Traditionally, structured digital data is stored _explicitly_. For instance, an 
 
 {/* ## Explicit vs Implicit */}
 
-<Video src="/videos/blogs/inr/explicit_data.mp4" muted></Video>
+<Video src="/videos/blog/inr/explicit_data.mp4" muted></Video>
 
 Here, each value in the image array corresponds to a pixel color. Explicit representations are rather intuitive, but they lack any semantic context, and therefore take up large amounts of space and don't consider pattern in data.
 
@@ -39,7 +39,7 @@ Another way to store a dataset is _implicitly_. Instead of storing the data dire
 
 To do so, we must learn some function $f$ that maps some property of the data to the data itself. Traditionally, data point coordinate is used for this mapping:
 
-<Video src="/videos/blogs/inr/implicit_data.mp4" muted></Video>
+<Video src="/videos/blog/inr/implicit_data.mp4" muted></Video>
 
 Here, $f$, which takes a position $(x, y)$ as input and outputs the pixel color at that position. Now, in order to save or transmit this image, we only need the function $f$. Additionally, we can interpolate between data points, discover trends, and even interpret the data in novel ways.
 
@@ -47,7 +47,7 @@ Here, $f$, which takes a position $(x, y)$ as input and outputs the pixel color 
 
 Generating a function that represents a dataset is a non-trivial task, and this is where neural networks come in. Neural networks (specifically the Multilayer Perceptrons) are universal function approximators, meaning they can represent almost any nonlinear function given enough input-output examples. By training a neural network on a coordinates and dataset values, we can learn its implicit _neural_ representation.
 
-<Video src="/videos/blogs/inr/INR.mp4" muted></Video>
+<Video src="/videos/blog/inr/INR.mp4" muted></Video>
 
 In this example, the INR has 2 inputs (for each 2D pixel cooridnate) and one output. However, the number network inputs/outputs can be arbitrary. For example, we can represent a color image with 3 outputs, each encoding one of RGB color channels.
 
@@ -104,7 +104,7 @@ Another interesting feature of NeRF is positional encoding. Since mapping high-f
 Since camera position and direction are independently parametarized, NeRF can even model change of one independently from other. For example, here we have fixed camera viewpoint, while viewing direction varies:
 
 {/* <figure> */}
-<Video src="http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/ECCV20/nerf/website_renders/viewdirs_website_bww.mp4" muted></Video>
+<Video src="/videos/blog/inr/NeRF_room_video.mp4" muted></Video>
 <figcaption>(from NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis[^tthresh])</figcaption>
 {/* </figure> */}
 

@@ -14,6 +14,6 @@ const render = await entry.render();
 
 import Post from '../../layouts/Post.astro';
 ---
-<Post frontmatter={entry.data} body={entry.body} headings={render.headings}>
+<Post frontmatter={entry.data} body={entry.body} headings={render.headings} dateVerb="Created">
   <render.Content />
 </Post>
