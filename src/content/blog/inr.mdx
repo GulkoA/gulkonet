@@ -1,6 +1,6 @@
 ---
 title: "Implicit Neural Representations: A New Way to Remember"
-description: Implicit Neural Representations (INRs) - representation of structured data as a continuous function. They intruduce novel methods of data compression, interpolation, and trend detection. This blog posts gives intuitive introduction into INRs and explains why overfitting is not always a bad thing
+description: Discover how Implicit Neural Representations are revolutionizing data storage and interpretation. This blog post gives a fresh perspective on mimicking human memory through continuous functions, showcasing breakthroughs in data compression, interpolation, and data interpretability
 created: 2025-03-20 est
 image: "blog/inr.png"
 color: "white"
@@ -15,7 +15,7 @@ import ModelViewer from '../../components/ModelViewer.astro'
 
 ## How do We Remember
 
-Technology has been long created to mimic natural world. However, computing sets itself apart in this matter with its rigorous structure. For example, data storage is traditionally highly structured, conforming to a list or a grid of bytes. Humans, on the other hand, retain memories as groups of interconnected neurons called ensembles[^1]. Essentially, a knowledge graph about a situation or topic is captured through a network of neurons, which are frequently activated at the same time. To retrieve this information, brain requires a "cue", which reactivates the same chain[^2]. For example, when forgetting a person's name, one might try to think of when they first met, triggering a memory of learning their name. Mnemonics like this act as cues, which trigger a sequence of strongly connected neurons to "find" the memory[^3].
+Technology has long been developed to mimic the natural world. However, computing sets itself apart in this matter with its rigorous structure. For example, data storage is traditionally highly structured, conforming to a list or a grid of bytes. Humans, on the other hand, retain memories as groups of interconnected neurons called ensembles[^1]. Essentially, a knowledge graph about a situation or topic is captured through a network of neurons, which are frequently activated at the same time. To retrieve this information, brain requires a "cue", which reactivates the same chain[^2]. For example, when forgetting a person's name, one might try to think of when they first met, triggering a memory of learning their name. Mnemonics like this act as cues, which trigger a sequence of strongly connected neurons to "find" the memory[^3].
 
 {/* <Figure/> */}
 
@@ -45,13 +45,13 @@ Here, $f$, which takes a position $(x, y)$ as input and outputs the pixel color 
 
 ## Neural Networks as Implicit Representations
 
-Generating a function that represents a dataset is a non-trivial task, and this is where neural networks come in. Neural networks (specifically the Multilayer Perceptrons) are universal function approximators, meaning they can represent almost any nonlinear function given enough input-output examples. By training a neural network on a coordinates and dataset values, we can learn its implicit _neural_ representation.
+Generating a function that represents a dataset is a non-trivial task, and this is where neural networks come in. Neural networks (specifically the Multilayer Perceptrons) are universal function approximators, meaning they can represent almost any nonlinear function given enough input-output examples. By training a neural network on coordinates and dataset values, we can learn its implicit _neural_ representation.
 
 <Video src="/videos/blog/inr/INR.mp4" muted></Video>
 
-In this example, the INR has 2 inputs (for each 2D pixel cooridnate) and one output. However, the number network inputs/outputs can be arbitrary. For example, we can represent a color image with 3 outputs, each encoding one of RGB color channels.
+In this example, the INR has 2 inputs (for each 2D pixel coordinate) and one output. However, the number of network inputs/outputs can be arbitrary. For example, we can represent a color image with 3 outputs, each encoding one of RGB color channels.
 
-To evaluate the quality of an Implicit Neural Representation, we need to find how similar reconstructed data is to the original. Traditionally, we use metrics like PSNR (Peak signal-to-noise ratio) and SSIM (Structural similarity index measure). PSNR is essentially (omitting a few aspects of the formula) the inverse of normalized mean squared error, where $PSNR \to 0$ is no similarity at all and $ PSNR \to \infty $ is a perfect match. However, PSNR only takes global error into account, such that a reconstruction can look noisy, but still have high PSNR. This is why we pair it with SSIM, which considers relative luminance, contrast, and structure and approximates percieved quality difference. When training a neural network, we can introduce these metrics as parts of the loss function.
+To evaluate the quality of an Implicit Neural Representation, we need to find how similar reconstructed data is to the original. Traditionally, we use metrics like PSNR (Peak signal-to-noise ratio) and SSIM (Structural similarity index measure). PSNR is essentially (omitting a few aspects of the formula) the inverse of normalized mean squared error, where $PSNR \to 0$ is no similarity at all and $ PSNR \to \infty $ is a perfect match. However, PSNR only takes global error into account, such that a reconstruction can look noisy, but still have high PSNR. This is why we pair it with SSIM, which considers relative luminance, contrast, and structure and approximates perceived quality difference. When training a neural network, we can introduce these metrics as parts of the loss function.
 
 > As mentioned in the beginning of this blog post, our goal is to pursue benefits of biological memory networks. However, it is important to note that biological neurons have very little in common with mathematical neurons in how they function. You can read more about here: https://doi.org/10.3390/biology12101330.
 
@@ -70,7 +70,7 @@ For instance, here I compressed 3D simulation of Hurricane Isabel[^5] with an Im
 <ModelViewer
     modelNames={["hurricane_gt", "hurricane_siren", "hurricane_tthresh"]}
     captions={["Original", "SIREN INR", "TTHRESH"]}
-    alt={["Hurricane simulation interactive 3D model, visualization without compression", "visualization after compressing with SIREN (surface looks smooth, imperfect details reconstruction, but percieved difference is small)", "visualization after compressing with TTHRESH (visible defects, surface looks noisy and grainy)"]}
+    alt={["Hurricane simulation interactive 3D model, visualization without compression", "visualization after compressing with SIREN (surface looks smooth, imperfect details reconstruction, but perceived difference is small)", "visualization after compressing with TTHRESH (visible defects, surface looks noisy and grainy)"]}
 />
 
 With a similar compression ratio of over 20,000x, computation compressor TTHRESH has many visual defects, which is represented by SSIM. Implicit Neural Representation SIREN, however, replicated most of the trends contained within data. When compressing a 4-dimensional dataset, which contains 20 time steps of simulation, results are as follow:
@@ -86,7 +86,7 @@ When training a traditional classifier or generative model, overfitting on train
 
 ## Interpolation and Neural Rendering
 
-Great advantage of INRs is that they map discrete data on a continuous function. This means that we can query between data points to interpolate data. This is useful for not just increasing resulution of media, but even for generating novel views and projections. For example, NeRF (Neural Radiance Fields) is an INR, which is trained on pictures of an 3D object from different camera positions. The same network is then queried at other camera positions to convert a series of pictures into a 3D model[^tthresh]:
+Great advantage of INRs is that they map discrete data on a continuous function. This means that we can query between data points to interpolate data. This is useful for not just increasing resolution of media, but even for generating novel views and projections. For example, NeRF (Neural Radiance Fields) is an INR, which is trained on pictures of an 3D object from different camera positions. The same network is then queried at other camera positions to convert a series of pictures into a 3D model[^tthresh]:
 
 <Figure filename="blog/nerf_fig1.png" alt="NeRF workflow from input images at different perspectives to rendering new views">
 <span slot="caption">NeRF workflow (from NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis[^tthresh])</span>
@@ -98,9 +98,9 @@ There are 5 inputs to a NeRF model despite working with 3D models. 3 of them rep
 <span slot="caption">(from NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis[^tthresh])</span>
 </Figure>
 
-Another interesting feature of NeRF is positional encoding. Since mapping high-frequency spacial coordinates to complex visual scenes is challenging for MLPs, encoding input with more scalars improves model precision. This is similar to when one describes a location in a city to someone, and gives multiple ways to get there, which help identify the location more precisely.
+Another interesting feature of NeRF is positional encoding. Since mapping high-frequency spatial coordinates to complex visual scenes is challenging for MLPs, encoding input with more scalars improves model precision. This is similar to when one describes a location in a city to someone, and gives multiple ways to get there, which help identify the location more precisely.
 
-Since camera position and direction are independently parametarized, NeRF can even model change of one independently from other. For example, here we have fixed camera viewpoint, while viewing direction varies:
+Since camera position and direction are independently parameterized, NeRF can even model change of one independently from other. For example, here we have fixed camera viewpoint, while viewing direction varies:
 
 {/* <figure> */}
 <Video src="/videos/blog/inr/NeRF_room_video.mp4" muted></Video>
@@ -115,11 +115,11 @@ This method has uses ranging from medical imaging, to computer graphics, to even
 
 {/* While interpolating small images like this carries little value, this is useful to visualize and interpret how exactly information is captured. */}
 
-## Trend Analysis
+## Trend Analysis and Data Interpretability
 
 Since INRs are mapping discrete data onto a continuous function through finding patterns, we can reverse engineer the learned weights of the network to discover these patterns. This is useful for trend analysis, as we can interpret the data in novel ways. By analyzing the weights of the network, we can discover trends in the data, such as periodicity, trends, and even anomalies.
 
-For example, iHyperTime introduced an INR that evaluates and generates time series data (any data mapped to time, such as weather, finincial trends, or social metrics)[^ihypertime]. To do, it uses 3 models for different levels of frequency: Trend (polynomial function), Seasonality (learnable Fourier series), and Residual (SIREN INR). This architecture is called TSNet and allows to model and interpret complex time series data with high accuracy.
+For example, iHyperTime introduced an INR that evaluates and generates time series data (any data mapped to time, such as weather, financial trends, or social metrics)[^ihypertime]. To do, it uses 3 models for different levels of frequency: Trend (polynomial function), Seasonality (learnable Fourier series), and Residual (SIREN INR). This architecture is called TSNet and allows to model and interpret complex time series data with high accuracy.
 
 <Figure filename="blog/tsnet.png" alt="TSNet model generating time series data">
 <span slot="caption">TSNet architecture (from iHyperTime: Interpretable Time Series Generation with Implicit Neural Representations[^ihypertime])</span>
@@ -127,7 +127,7 @@ For example, iHyperTime introduced an INR that evaluates and generates time seri
 
 After training a TSNet INR on known data, iHyperTime, uses it to generate new, synthetic time series. It does this with a "hypernetwork" - a network that predicts the parameters (or weights) of TSNet for different time series. Essentially, iHyperTime first summarizes a real time series to capture its trend, seasonality, and residual components, and, by tweaking them, it can generate brand new time series that still look like real data.
 
-For example, here is the distribution and overlap of storck market data generated by iHyperTime and some non-INR models:
+For example, here is the distribution and overlap of stock market data generated by iHyperTime and some non-INR models:
 
 <Figure filename="blog/iht_stock360.png" alt="Distribution of Stock360 market data generated by TSNet">
 <span slot="caption">Distribution of Stock360 market data generated by TSNet (from iHyperTime: Interpretable Time Series Generation with Implicit Neural Representations[^ihypertime])</span>
