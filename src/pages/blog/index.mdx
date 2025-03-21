@@ -12,6 +12,8 @@ export const pages = (await getCollection('blog')).sort((a, b) => {
 
 # Blog
 
+I write about research, design, and engineering. You can follow me on [Twitter](https://twitter.com/alex_gulko) for updates.
+
 {pages.map((page) => (
   <ProjectCard
       title={page.data.title}
